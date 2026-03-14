@@ -41,6 +41,33 @@ The UI enforces a single-page constraint throughout. If your selections overflow
 
 Data flows in one direction: the server component reads JSON files and passes them as props to the client shell. From there, everything is client-side state. The API routes are stateless except for a short-lived cache that bridges PDF generation.
 
+### Deployment Architecture
+
+```
+            Internet
+               |
+          [ Cloudflare ]         DNS + SSL + DDoS protection
+               |
+          [ Nginx ]              Reverse proxy on home server
+           /       \
+    race.domain.com  other-app.domain.com
+         |                  |
+   ┌───────────┐     ┌───────────┐
+   │  RACE     │     │  Other    │
+   │  Container│     │  Container│
+   │  :3000    │     │  :XXXX    │
+   └───────────┘     └───────────┘
+         └──────┬──────┘
+          Docker Compose
+```
+
+The app runs as a Docker container behind Nginx. In production, `output: "standalone"` bundles the Next.js server into a self-contained directory. Puppeteer uses the system-installed Chromium inside the container (set via `PUPPETEER_EXECUTABLE_PATH`) rather than downloading its own copy.
+
+The Docker image is a multi-stage build:
+1. **deps** -- installs `node_modules` from the lockfile
+2. **builder** -- compiles the Next.js production bundle
+3. **runner** -- slim image with only Chromium, the built app, and production dependencies
+
 ## Data Layer
 
 There's no database. The entire resume lives in four JSON files under `src/data/`:
@@ -98,6 +125,8 @@ The `charCount` field on each bullet enables quick space estimation during curat
 
 ## Setup
 
+### Local Development
+
 ```bash
 npm install
 ```
@@ -116,6 +145,59 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Docker
+
+Docker is the recommended way to run RACE in production. The image includes Chromium for PDF generation.
+
+Create a `.env` file (Docker Compose reads this automatically):
+
+```
+ANTHROPIC_API_KEY=your-api-key-here
+ANTHROPIC_MODEL=claude-sonnet-4-20250514
+PRINT_BASE_URL=http://localhost:3000
+```
+
+Build and run:
+
+```bash
+docker compose up --build
+```
+
+The app will be available at `http://localhost:3000`. To run in the background:
+
+```bash
+docker compose up --build -d
+```
+
+Stop the container:
+
+```bash
+docker compose down
+```
+
+Rebuild after code changes:
+
+```bash
+docker compose up --build
+```
+
+#### What's in the Docker setup
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Multi-stage build: install deps, build Next.js, create slim production image with Chromium |
+| `docker-compose.yml` | Defines the service, maps port 3000, loads env vars from `.env` |
+| `.dockerignore` | Excludes `node_modules`, `.next`, `.git`, and env files from the build context |
+
+#### Environment variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ANTHROPIC_API_KEY` | Yes | -- | Your Anthropic API key |
+| `ANTHROPIC_MODEL` | No | `claude-sonnet-4-20250514` | Which Claude model to use |
+| `PRINT_BASE_URL` | No | `http://localhost:3000` | URL Puppeteer uses to reach the print route |
+| `PUPPETEER_EXECUTABLE_PATH` | No | -- | Path to system Chromium (set automatically in Docker) |
 
 ## Customizing Your Data
 

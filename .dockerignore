@@ -1,0 +1,11 @@
+# Same idea as .gitignore but for Docker.
+# Files listed here won't be copied into the image,
+# keeping builds fast and images small.
+
+node_modules
+.next
+.git
+.env.local
+.env
+*.md
+.DS_Store

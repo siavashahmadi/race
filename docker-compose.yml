@@ -1,0 +1,17 @@
+# Docker Compose defines your services (containers) and how they connect.
+# Run with: docker compose up --build
+# Stop with: docker compose down
+
+services:
+  race:
+    build: .                          # Build using the Dockerfile in this directory
+    ports:
+      - "3000:3000"                   # Map host port 3000 → container port 3000
+    environment:
+      - NODE_ENV=production
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}          # Pulled from .env file
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
+      - PRINT_BASE_URL=http://localhost:3000             # Puppeteer talks to itself
+    env_file:
+      - .env                          # Load variables from .env file
+    restart: unless-stopped           # Auto-restart if the app crashes

@@ -5,19 +5,26 @@ import type { ResumeState } from "../types";
 
 const launchArgs = ["--no-sandbox", "--disable-setuid-sandbox"];
 
+// If PUPPETEER_EXECUTABLE_PATH is set (e.g. in Docker), use the system
+// Chromium instead of Puppeteer's bundled one.
+const launchOptions = {
+  args: launchArgs,
+  ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+  }),
+};
+
 async function getBrowser(): Promise<Browser> {
   if (process.env.NODE_ENV === "production") {
     if (!(globalThis as Record<string, unknown>).__prodBrowser) {
       (globalThis as Record<string, unknown>).__prodBrowser =
-        await puppeteer.launch({ args: launchArgs });
+        await puppeteer.launch(launchOptions);
     }
     return (globalThis as Record<string, unknown>).__prodBrowser as Browser;
   }
   // Dev mode: store on globalThis to survive hot reloads
   if (!(globalThis as Record<string, unknown>).__browser) {
-    (globalThis as Record<string, unknown>).__browser = await puppeteer.launch({
-      args: launchArgs,
-    });
+    (globalThis as Record<string, unknown>).__browser = await puppeteer.launch(launchOptions);
   }
   return (globalThis as Record<string, unknown>).__browser as Browser;
 }
