@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Google",
+    "role": "Software Engineer",
+    "dates": "May 2023 – Present",
+    "location": "New York, NY",
+    "order": 1
+  },
+  {
+    "name": "Meta",
+    "role": "Associate Software Engineer",
+    "dates": "May 2021 – Jan 2023",
+    "location": "New York, NY",
+    "order": 2
+  },
+  {
+    "name": "Stripe",
+    "role": "Software Engineering Intern",
+    "dates": "Jun 2020 – Aug 2020",
+    "location": "Los Angeles, CA",
+    "order": 3
+  }
+]

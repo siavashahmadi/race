@@ -1,0 +1,11 @@
+{
+  "name": "Jane Doe",
+  "phone": "555-123-4567",
+  "email": "jane.doe@example.com",
+  "linkedin": "linkedin.com/in/janedoe",
+  "education": {
+    "school": "University of California, Los Angeles",
+    "degree": "Bachelor of Science in Computer Science",
+    "graduationDate": "Jun 2020"
+  }
+}

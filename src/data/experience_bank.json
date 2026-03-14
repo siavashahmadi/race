@@ -1,0 +1,191 @@
+[
+  {
+    "id": "g1-arch",
+    "company": "Google",
+    "category": ["Systems", "Full-Stack"],
+    "label": "Full-Stack SaaS Architecture",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed and implemented scalable microservices architecture serving enterprise clients with high availability requirements.",
+    "priority": 1,
+    "charCount": 195
+  },
+  {
+    "id": "g2-llm",
+    "company": "Google",
+    "category": ["AI", "Full-Stack"],
+    "label": "LLM-Powered Support Chatbot",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Built an intelligent chatbot using RAG architecture with vector embeddings for context-aware customer support.",
+    "priority": 1,
+    "charCount": 180
+  },
+  {
+    "id": "g3-data",
+    "company": "Google",
+    "category": ["Backend", "Data"],
+    "label": "Real-Time Data Pipeline",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Engineered high-throughput data ingestion pipeline processing millions of IoT sensor readings with sub-second latency.",
+    "priority": 1,
+    "charCount": 190
+  },
+  {
+    "id": "g4-cloud",
+    "company": "Google",
+    "category": ["Cloud", "DevOps"],
+    "label": "Cloud Infrastructure & CI/CD",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orchestrated cloud infrastructure with Terraform, implementing blue-green deployments and automated scaling policies.",
+    "priority": 2,
+    "charCount": 185
+  },
+  {
+    "id": "g5-api",
+    "company": "Google",
+    "category": ["Backend", "API"],
+    "label": "API Platform & Developer Experience",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed RESTful and GraphQL APIs with comprehensive documentation, serving internal and external developer consumers.",
+    "priority": 2,
+    "charCount": 185
+  },
+  {
+    "id": "g6-fe",
+    "company": "Google",
+    "category": ["Frontend", "UI"],
+    "label": "Interactive Dashboard & Visualization",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed responsive React dashboards with real-time charting, enabling customers to monitor usage patterns across services.",
+    "priority": 2,
+    "charCount": 190
+  },
+  {
+    "id": "g7-perf",
+    "company": "Google",
+    "category": ["Backend", "Performance"],
+    "label": "Performance Optimization",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Reduced API response times by optimizing database queries and implementing intelligent caching strategies across the platform.",
+    "priority": 2,
+    "charCount": 195
+  },
+  {
+    "id": "g8-test",
+    "company": "Google",
+    "category": ["Testing", "Quality"],
+    "label": "Testing & Quality Assurance",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Established comprehensive test suite with unit, integration, and end-to-end tests achieving high code coverage.",
+    "priority": 3,
+    "charCount": 180
+  },
+  {
+    "id": "g9-auth",
+    "company": "Google",
+    "category": ["Security", "Backend"],
+    "label": "Authentication & Authorization",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Implemented role-based access control with OAuth 2.0 and JWT tokens for multi-tenant enterprise security.",
+    "priority": 3,
+    "charCount": 175
+  },
+  {
+    "id": "g10-mentor",
+    "company": "Google",
+    "category": ["Leadership", "Process"],
+    "label": "Technical Mentorship & Code Review",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mentored junior engineers through structured code reviews, pair programming sessions, and technical documentation.",
+    "priority": 3,
+    "charCount": 180
+  },
+  {
+    "id": "m1-micro",
+    "company": "Meta",
+    "category": ["Backend", "Systems"],
+    "label": "Microservices & Payment Systems",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Built distributed payment processing microservices handling high transaction volumes with fault tolerance.",
+    "priority": 1,
+    "charCount": 175
+  },
+  {
+    "id": "m2-api",
+    "company": "Meta",
+    "category": ["Backend", "API"],
+    "label": "Enterprise API Development",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed enterprise-grade RESTful APIs with comprehensive authentication and rate limiting for internal platforms.",
+    "priority": 1,
+    "charCount": 180
+  },
+  {
+    "id": "m3-fe",
+    "company": "Meta",
+    "category": ["Frontend", "UI"],
+    "label": "Customer Portal Redesign",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Led frontend redesign of customer-facing portal using React with responsive design and accessibility compliance.",
+    "priority": 1,
+    "charCount": 185
+  },
+  {
+    "id": "m4-cloud",
+    "company": "Meta",
+    "category": ["Cloud", "DevOps"],
+    "label": "Cloud Migration & Containerization",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Migrated legacy monolith to containerized microservices on Kubernetes with automated CI/CD pipelines.",
+    "priority": 2,
+    "charCount": 175
+  },
+  {
+    "id": "m5-data",
+    "company": "Meta",
+    "category": ["Data", "Analytics"],
+    "label": "Data Analytics & Reporting",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed analytics dashboards processing social platform data for business intelligence and operational insights.",
+    "priority": 2,
+    "charCount": 175
+  },
+  {
+    "id": "m6-agile",
+    "company": "Meta",
+    "category": ["Process", "Leadership"],
+    "label": "Agile Process & Sprint Leadership",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilitated agile ceremonies and drove sprint planning for cross-functional team delivering quarterly releases.",
+    "priority": 2,
+    "charCount": 180
+  },
+  {
+    "id": "m7-test",
+    "company": "Meta",
+    "category": ["Testing", "Quality"],
+    "label": "Automated Testing Framework",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Implemented automated testing framework with Selenium and Jest reducing regression testing time significantly.",
+    "priority": 3,
+    "charCount": 175
+  },
+  {
+    "id": "m8-perf",
+    "company": "Meta",
+    "category": ["Performance", "Backend"],
+    "label": "Application Performance Tuning",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Profiled and optimized application bottlenecks reducing latency and improving throughput for high-traffic services.",
+    "priority": 3,
+    "charCount": 180
+  },
+  {
+    "id": "s1-intern",
+    "company": "Stripe",
+    "category": ["Full-Stack", "Frontend"],
+    "label": "Payment Platform Feature Development",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Contributed to payment platform features using React and Ruby on Rails in an agile environment.",
+    "priority": 1,
+    "charCount": 170
+  },
+  {
+    "id": "s2-test",
+    "company": "Stripe",
+    "category": ["Testing", "Quality"],
+    "label": "Test Automation & QA",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed automated test suites for checkout workflow ensuring reliability across browser environments.",
+    "priority": 2,
+    "charCount": 170
+  },
+  {
+    "id": "s3-api",
+    "company": "Stripe",
+    "category": ["Backend", "API"],
+    "label": "REST API Integration",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integrated third-party vendor APIs for payment processing and notification services within the platform.",
+    "priority": 2,
+    "charCount": 170
+  }
+]

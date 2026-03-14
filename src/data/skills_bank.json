@@ -1,0 +1,44 @@
+[
+  {
+    "category": "Programming Languages",
+    "canonicalOrder": 1,
+    "minDisplay": 4,
+    "maxDisplay": 7,
+    "items": ["JavaScript (Modern/ES6+)", "TypeScript", "Python", "Kotlin", "SQL", "HTML5", "CSS3/Sass", "Go", "Swift", "C++"]
+  },
+  {
+    "category": "Frontend & UI",
+    "canonicalOrder": 2,
+    "minDisplay": 3,
+    "maxDisplay": 6,
+    "items": ["React", "Angular", "Vue.js", "Next.js", "Tailwind CSS", "Chakra UI", "Storybook", "Svelte"]
+  },
+  {
+    "category": "Backend & Data",
+    "canonicalOrder": 3,
+    "minDisplay": 4,
+    "maxDisplay": 8,
+    "items": ["Node.js", "Django", "FastAPI", "Spring Boot", "GraphQL", "PostgreSQL", "MongoDB", "Cassandra", "Redis", "Kafka", "RabbitMQ", "Express.js"]
+  },
+  {
+    "category": "Cloud & DevOps",
+    "canonicalOrder": 4,
+    "minDisplay": 4,
+    "maxDisplay": 10,
+    "items": ["AWS (EC2, S3, Lambda, RDS, EKS)", "GCP", "Azure", "Docker", "Kubernetes", "Pulumi", "Datadog", "Grafana", "ArgoCD", "Git", "GitHub Actions", "GitLab CI"]
+  },
+  {
+    "category": "AI Engineering",
+    "canonicalOrder": 5,
+    "minDisplay": 3,
+    "maxDisplay": 8,
+    "items": ["LangChain", "LangGraph", "Semantic Kernel", "Vector Databases (FAISS, Pinecone)", "RAG Architecture", "OpenAI API", "Claude API", "Prompt Engineering", "MLflow"]
+  },
+  {
+    "category": "AI Productivity",
+    "canonicalOrder": 6,
+    "minDisplay": 3,
+    "maxDisplay": 6,
+    "items": ["Claude Code", "Cursor", "GitHub Copilot", "Windsurf", "AI Workflows & Guardrails", "v0"]
+  }
+]
