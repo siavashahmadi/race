@@ -37,11 +37,13 @@ function PrintContent() {
   );
 
   return (
-    <ResumePreview
-      selectedBullets={selectedBullets}
-      curatedSkills={state.curatedSkills}
-      profile={profile as Profile}
-    />
+    <div style={{ width: "816px", margin: "0 auto", transform: "none" }}>
+      <ResumePreview
+        selectedBullets={selectedBullets}
+        curatedSkills={state.curatedSkills}
+        profile={profile as Profile}
+      />
+    </div>
   );
 }
 

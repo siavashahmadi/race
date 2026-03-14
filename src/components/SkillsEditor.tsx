@@ -34,6 +34,10 @@ export default function SkillsEditor({
     if (!existing) return;
 
     const hasItem = existing.items.includes(item);
+    if (!hasItem) {
+      const bank = skillsBank.find((b) => b.category === category);
+      if (bank && existing.items.length >= bank.maxDisplay) return;
+    }
     const newItems = hasItem
       ? existing.items.filter((i) => i !== item)
       : [...existing.items, item];
@@ -71,8 +75,8 @@ export default function SkillsEditor({
                   </span>
                 </label>
                 {isActive && (
-                  <span className="text-xs text-gray-500">
-                    {activeItems.size}/{bank.items.length}
+                  <span className={`text-xs ${activeItems.size >= bank.maxDisplay ? "text-amber-600 font-semibold" : "text-gray-500"}`}>
+                    {activeItems.size}/{bank.maxDisplay}
                   </span>
                 )}
               </div>

@@ -29,6 +29,7 @@ export async function generatePDF(state: ResumeState): Promise<Buffer> {
   const baseUrl = process.env.PRINT_BASE_URL || "http://localhost:3000";
   const browser = await getBrowser();
   const page = await browser.newPage();
+  await page.setViewport({ width: 816, height: 1056 }); // 8.5in x 11in at 96dpi
 
   try {
     await page.goto(`${baseUrl}/print?id=${id}`, {
@@ -36,8 +37,9 @@ export async function generatePDF(state: ResumeState): Promise<Buffer> {
       timeout: 15000,
     });
 
-    // Wait for fonts to load
+    // Wait for fonts to fully load and layout to settle after font-swap
     await page.evaluateHandle("document.fonts.ready");
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const pdf = await page.pdf({
       format: "Letter",
@@ -49,7 +51,7 @@ export async function generatePDF(state: ResumeState): Promise<Buffer> {
 
     return Buffer.from(pdf);
   } finally {
-    await page.close();
+    try { await page.close(); } catch { /* already closing */ }
   }
 }
 

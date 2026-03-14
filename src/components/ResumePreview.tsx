@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { COMPANY_ORDER, COMPANY_META } from "../lib/resume-constants";
 import type { Bullet, SkillCategory, Profile } from "../types";
 
@@ -19,10 +19,13 @@ export default function ResumePreview({
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current && onOverflow) {
-      const isOverflowing = ref.current.scrollHeight > 1056; // 11in * 96dpi
-      onOverflow(isOverflowing);
+      const height = ref.current.scrollHeight;
+      const threshold = 1056; // 11in * 96dpi — matches the container's minHeight
+      const isOver = height > threshold;
+      console.log(`[ResumePreview] scrollHeight: ${height}px, threshold: ${threshold}px, overflowing: ${isOver}`);
+      onOverflow(isOver);
     }
   }, [selectedBullets, curatedSkills, onOverflow]);
 
@@ -59,7 +62,7 @@ export default function ResumePreview({
           <p>
             {profile.phone} | {profile.email}
           </p>
-          <p className="text-blue-600 underline">{profile.linkedin}</p>
+          <a href={profile.linkedin} className="text-blue-600 underline">{profile.linkedin}</a>
         </div>
       </div>
 

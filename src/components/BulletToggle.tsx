@@ -44,6 +44,7 @@ export default function BulletToggle({
                 return (
                   <button
                     key={bullet.id}
+                    title={bullet.text}
                     onClick={() => onToggle(bullet.id)}
                     className={`w-full text-left p-2 rounded text-sm transition-colors border ${
                       isSelected
@@ -53,7 +54,7 @@ export default function BulletToggle({
                   >
                     <span className="font-medium">{bullet.label}</span>
                     <span className="text-gray-500 ml-2 text-xs">
-                      {bullet.text.slice(0, 60)}...
+                      {bullet.text.slice(0, 60)}{bullet.text.length > 60 ? "..." : ""}
                     </span>
                   </button>
                 );
