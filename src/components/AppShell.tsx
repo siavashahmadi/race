@@ -13,17 +13,22 @@ import type {
   Profile,
   AnalyzeResponse,
 } from "../types";
+import type { DemoScenario } from "../data/demos";
 
 interface AppShellProps {
   allBullets: Bullet[];
   skillsBank: SkillBankCategory[];
   profile: Profile;
+  demoMode?: boolean;
+  demoScenarios?: DemoScenario[];
 }
 
 export default function AppShell({
   allBullets,
   skillsBank,
   profile,
+  demoMode = false,
+  demoScenarios,
 }: AppShellProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [curatedSkills, setCuratedSkills] = useState<SkillCategory[]>([]);
@@ -66,6 +71,13 @@ export default function AppShell({
     setSelectedIds([]);
     setCuratedSkills(getDefaultSkills(skillsBank));
     setReasoning("");
+    setHasAnalyzed(true);
+  };
+
+  const handleDemoSelect = (scenario: DemoScenario) => {
+    setSelectedIds(scenario.result.selectedBulletIds);
+    setCuratedSkills(scenario.result.curatedSkills);
+    setReasoning(scenario.result.reasoning);
     setHasAnalyzed(true);
   };
 
@@ -117,8 +129,13 @@ export default function AppShell({
           <span className="font-normal text-gray-500 text-sm">
             Resume-as-Code Engine
           </span>
+          {demoMode && (
+            <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
+              Demo
+            </span>
+          )}
         </h1>
-        {!hasAnalyzed && !isAnalyzing && (
+        {!hasAnalyzed && !isAnalyzing && !demoMode && (
           <button
             onClick={handleManualMode}
             className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -136,10 +153,42 @@ export default function AppShell({
 
       {!hasAnalyzed ? (
         <div className="max-w-2xl mx-auto p-6 mt-8">
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold mb-4">Step 1: Paste Job Description</h2>
-            <JDInput onAnalyze={handleAnalyze} isLoading={isAnalyzing} />
-          </div>
+          {demoMode && demoScenarios ? (
+            <div className="bg-white rounded-xl shadow-sm border p-6">
+              <h2 className="text-lg font-semibold mb-2">
+                Try a Sample Job Description
+              </h2>
+              <p className="text-sm text-gray-500 mb-6">
+                See how RACE curates a resume for different roles. Pick a
+                scenario below — the AI curation is pre-computed, but the
+                toggle controls, live preview, and PDF export all work for
+                real.
+              </p>
+              <div className="space-y-3">
+                {demoScenarios.map((scenario) => (
+                  <button
+                    key={scenario.title}
+                    onClick={() => handleDemoSelect(scenario)}
+                    className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors group"
+                  >
+                    <div className="font-semibold text-gray-900 group-hover:text-blue-700">
+                      {scenario.title}
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                      {scenario.jobDescription}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl shadow-sm border p-6">
+              <h2 className="text-lg font-semibold mb-4">
+                Step 1: Paste Job Description
+              </h2>
+              <JDInput onAnalyze={handleAnalyze} isLoading={isAnalyzing} />
+            </div>
+          )}
 
           {isAnalyzing && (
             <div className="mt-6 text-center text-gray-500 text-sm">

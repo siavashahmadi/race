@@ -1,0 +1,45 @@
+{
+  "title": "Full-Stack AI Engineer",
+  "jobDescription": "Join our AI team to build intelligent applications that leverage large language models. You'll develop full-stack features using React/Next.js on the frontend and Python/Node.js on the backend, integrating LLM APIs (OpenAI, Anthropic) with RAG pipelines and vector databases. Experience with LangChain, prompt engineering, and building production AI systems is highly desired. You should be comfortable with cloud deployment (AWS), Docker, and monitoring AI systems in production.",
+  "result": {
+    "selectedBulletIds": [
+      "g2-llm",
+      "g1-arch",
+      "g3-data",
+      "g5-api",
+      "g4-cloud",
+      "m1-micro",
+      "m2-api",
+      "m3-fe",
+      "m4-cloud",
+      "s1-intern"
+    ],
+    "curatedSkills": [
+      {
+        "category": "AI Engineering",
+        "items": ["LangChain", "LangGraph", "RAG Architecture", "Vector Databases (FAISS, Pinecone)", "OpenAI API", "Claude API", "Prompt Engineering"]
+      },
+      {
+        "category": "Programming Languages",
+        "items": ["Python", "TypeScript", "JavaScript (Modern/ES6+)", "SQL"]
+      },
+      {
+        "category": "Frontend & UI",
+        "items": ["React", "Next.js", "Tailwind CSS"]
+      },
+      {
+        "category": "Backend & Data",
+        "items": ["Node.js", "FastAPI", "PostgreSQL", "Redis", "Kafka", "MongoDB"]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "items": ["AWS (EC2, S3, Lambda, RDS, EKS)", "Docker", "Kubernetes", "Datadog", "Git", "GitHub Actions"]
+      },
+      {
+        "category": "AI Productivity",
+        "items": ["Claude Code", "Cursor", "GitHub Copilot", "AI Workflows & Guardrails"]
+      }
+    ],
+    "reasoning": "Led with the LLM chatbot bullet from Google since it directly matches the JD's focus on LLM-powered applications and RAG architecture. Promoted AI Engineering to the top of the skills list and included the full suite of LLM tools. Kept full-stack skills visible (React, Next.js, Node.js, Python) since the role requires both frontend and backend work. The data pipeline bullet demonstrates experience with the kind of data infrastructure that backs AI systems. Included AI Productivity tools to show the candidate actively uses AI in their development workflow."
+  }
+}

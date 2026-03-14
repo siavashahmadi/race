@@ -6,6 +6,13 @@ import skillsBank from "../../../data/skills_bank.json";
 import type { Bullet, SkillBankCategory } from "../../../types";
 
 export async function POST(request: Request) {
+  if (process.env.DEMO_MODE === "true") {
+    return NextResponse.json(
+      { error: "AI analysis is disabled in demo mode" },
+      { status: 403 }
+    );
+  }
+
   try {
     const body = await request.json();
     const parsed = AnalyzeRequestSchema.safeParse(body);

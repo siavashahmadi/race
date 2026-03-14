@@ -1,0 +1,37 @@
+{
+  "title": "Backend Engineer (Python)",
+  "jobDescription": "We're hiring a Backend Engineer to design and build scalable APIs and data pipelines. You'll work primarily in Python (Django/FastAPI) with PostgreSQL and Redis, building services that handle millions of requests daily. Experience with message queues (Kafka, RabbitMQ), containerization (Docker/Kubernetes), and cloud infrastructure (AWS) is required. You'll own services end-to-end: from design through deployment and monitoring. Strong testing practices and CI/CD experience expected.",
+  "result": {
+    "selectedBulletIds": [
+      "g3-data",
+      "g1-arch",
+      "g5-api",
+      "g7-perf",
+      "g4-cloud",
+      "m1-micro",
+      "m2-api",
+      "m8-perf",
+      "m4-cloud",
+      "s3-api"
+    ],
+    "curatedSkills": [
+      {
+        "category": "Programming Languages",
+        "items": ["Python", "SQL", "TypeScript", "JavaScript (Modern/ES6+)", "Go"]
+      },
+      {
+        "category": "Backend & Data",
+        "items": ["Django", "FastAPI", "PostgreSQL", "Redis", "Kafka", "RabbitMQ", "Node.js", "MongoDB"]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "items": ["AWS (EC2, S3, Lambda, RDS, EKS)", "Docker", "Kubernetes", "GitHub Actions", "Datadog", "Git", "ArgoCD"]
+      },
+      {
+        "category": "AI Productivity",
+        "items": ["Claude Code", "Cursor", "GitHub Copilot"]
+      }
+    ],
+    "reasoning": "Focused on backend infrastructure and data pipeline bullets — the Google data pipeline and API platform bullets directly match the JD's emphasis on scalable APIs and data processing. Selected Meta's microservices and performance tuning bullets to demonstrate distributed systems experience. Python and Django/FastAPI are placed first in skills since the JD specifies Python as the primary language. Heavy emphasis on Cloud & DevOps skills (Kubernetes, Datadog, ArgoCD) to match their end-to-end ownership expectation. Dropped Frontend & UI category entirely as the role is backend-focused."
+  }
+}

@@ -3,15 +3,29 @@
 # Stop with: docker compose down
 
 services:
-  race:
-    build: .                          # Build using the Dockerfile in this directory
+  # Public demo — pre-baked AI results, no API key needed
+  race-demo:
+    build: .
     ports:
-      - "3000:3000"                   # Map host port 3000 → container port 3000
+      - "3000:3000"
     environment:
       - NODE_ENV=production
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}          # Pulled from .env file
-      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
-      - PRINT_BASE_URL=http://localhost:3000             # Puppeteer talks to itself
-    env_file:
-      - .env                          # Load variables from .env file
-    restart: unless-stopped           # Auto-restart if the app crashes
+      - DEMO_MODE=true
+      - PRINT_BASE_URL=http://localhost:3000
+    restart: unless-stopped
+
+  # Full version — live AI, requires API key
+  # Uncomment when ready to run both versions
+  # race-full:
+  #   build: .
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DEMO_MODE=false
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #     - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
+  #     - PRINT_BASE_URL=http://localhost:3000
+  #   env_file:
+  #     - .env
+  #   restart: unless-stopped

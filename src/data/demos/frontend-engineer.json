@@ -1,0 +1,41 @@
+{
+  "title": "Senior Frontend Engineer",
+  "jobDescription": "We're looking for a Senior Frontend Engineer to lead the development of our customer-facing web applications. You'll work with React, TypeScript, and Next.js to build responsive, performant UIs. Experience with design systems, component libraries, and accessibility standards is highly valued. You'll collaborate closely with product designers and backend engineers to deliver polished user experiences. Familiarity with CI/CD pipelines and cloud deployment (AWS/GCP) is a plus.",
+  "result": {
+    "selectedBulletIds": [
+      "g1-arch",
+      "g6-fe",
+      "g5-api",
+      "g2-llm",
+      "g7-perf",
+      "m3-fe",
+      "m1-micro",
+      "m2-api",
+      "m4-cloud",
+      "s1-intern"
+    ],
+    "curatedSkills": [
+      {
+        "category": "Programming Languages",
+        "items": ["TypeScript", "JavaScript (Modern/ES6+)", "HTML5", "CSS3/Sass", "Python", "SQL"]
+      },
+      {
+        "category": "Frontend & UI",
+        "items": ["React", "Next.js", "Tailwind CSS", "Storybook", "Vue.js", "Chakra UI"]
+      },
+      {
+        "category": "Backend & Data",
+        "items": ["Node.js", "GraphQL", "Express.js", "PostgreSQL", "Redis"]
+      },
+      {
+        "category": "Cloud & DevOps",
+        "items": ["AWS (EC2, S3, Lambda, RDS, EKS)", "Docker", "GitHub Actions", "Git", "GCP"]
+      },
+      {
+        "category": "AI Productivity",
+        "items": ["Claude Code", "Cursor", "GitHub Copilot"]
+      }
+    ],
+    "reasoning": "Prioritized frontend and UI-focused bullets from Google (dashboard visualization, full-stack architecture) and Meta (portal redesign). Selected TypeScript, React, and Next.js as top skills since they're explicitly mentioned in the JD. Included the design system and component library tools (Storybook, Chakra UI) to match their interest in design systems. Kept backend skills lean but present to show full-stack capability. Dropped the AI Engineering category since the role doesn't focus on ML/AI infrastructure."
+  }
+}
