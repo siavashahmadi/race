@@ -17,6 +17,8 @@ export async function POST(request: Request) {
     const pdfBuffer = await generatePDF({
       selectedBulletIds: parsed.data.selectedBulletIds,
       curatedSkills: parsed.data.curatedSkills,
+      bulletTextOverrides: parsed.data.bulletTextOverrides,
+      bulletLabelOverrides: parsed.data.bulletLabelOverrides,
     });
 
     return new Response(new Uint8Array(pdfBuffer), {

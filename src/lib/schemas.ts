@@ -50,9 +50,13 @@ export const AnalyzeResponseSchema = z.object({
 export const ExportRequestSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   curatedSkills: z.array(SkillCategorySchema),
+  bulletTextOverrides: z.record(z.string(), z.string()).default({}),
+  bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
 });
 
 export const ResumeStateSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   curatedSkills: z.array(SkillCategorySchema),
+  bulletTextOverrides: z.record(z.string(), z.string()).default({}),
+  bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
 });

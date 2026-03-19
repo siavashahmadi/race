@@ -7,12 +7,16 @@ interface BulletToggleProps {
   allBullets: Bullet[];
   selectedIds: string[];
   onToggle: (id: string) => void;
+  bulletTextOverrides?: Record<string, string>;
+  bulletLabelOverrides?: Record<string, string>;
 }
 
 export default function BulletToggle({
   allBullets,
   selectedIds,
   onToggle,
+  bulletTextOverrides,
+  bulletLabelOverrides,
 }: BulletToggleProps) {
   const selectedSet = new Set(selectedIds);
 
@@ -41,10 +45,15 @@ export default function BulletToggle({
             <div className="space-y-1">
               {companyBullets.map((bullet) => {
                 const isSelected = selectedSet.has(bullet.id);
+                const isTextOverridden = !!(bulletTextOverrides && bullet.id in bulletTextOverrides);
+                const isLabelOverridden = !!(bulletLabelOverrides && bullet.id in bulletLabelOverrides);
+                const isOverridden = isTextOverridden || isLabelOverridden;
+                const displayLabel = (bulletLabelOverrides && bulletLabelOverrides[bullet.id]) || bullet.label;
+                const displayText = (bulletTextOverrides && bulletTextOverrides[bullet.id]) || bullet.text;
                 return (
                   <button
                     key={bullet.id}
-                    title={bullet.text}
+                    title={displayText}
                     onClick={() => onToggle(bullet.id)}
                     className={`w-full text-left p-2 rounded text-sm transition-colors border ${
                       isSelected
@@ -52,9 +61,17 @@ export default function BulletToggle({
                         : "border-gray-200 hover:bg-gray-50"
                     }`}
                   >
-                    <span className="font-medium">{bullet.label}</span>
+                    <span className="font-medium">
+                      {displayLabel}
+                      {isOverridden && (
+                        <span
+                          className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-400 ml-1 align-middle"
+                          title="Edited"
+                        />
+                      )}
+                    </span>
                     <span className="text-gray-500 ml-2 text-xs">
-                      {bullet.text.slice(0, 60)}{bullet.text.length > 60 ? "..." : ""}
+                      {displayText.slice(0, 60)}{displayText.length > 60 ? "..." : ""}
                     </span>
                   </button>
                 );

@@ -39,8 +39,38 @@ export default function AppShell({
   const [error, setError] = useState<string>("");
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
   const [showReasoning, setShowReasoning] = useState(false);
+  const [bulletTextOverrides, setBulletTextOverrides] = useState<Record<string, string>>({});
+  const [bulletLabelOverrides, setBulletLabelOverrides] = useState<Record<string, string>>({});
 
-  const selectedBullets = allBullets.filter((b) => selectedIds.includes(b.id));
+  const selectedBullets = allBullets
+    .filter((b) => selectedIds.includes(b.id))
+    .map((b) => {
+      let result = b;
+      if (b.id in bulletTextOverrides) result = { ...result, text: bulletTextOverrides[b.id] };
+      if (b.id in bulletLabelOverrides) result = { ...result, label: bulletLabelOverrides[b.id] };
+      return result;
+    });
+
+  const handleBulletTextEdit = useCallback((id: string, newText: string) => {
+    setBulletTextOverrides((prev) => ({ ...prev, [id]: newText }));
+  }, []);
+
+  const handleBulletLabelEdit = useCallback((id: string, newLabel: string) => {
+    setBulletLabelOverrides((prev) => ({ ...prev, [id]: newLabel }));
+  }, []);
+
+  const handleBulletReset = useCallback((id: string) => {
+    setBulletTextOverrides((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setBulletLabelOverrides((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  }, []);
 
   const handleAnalyze = async (jd: string) => {
     setIsAnalyzing(true);
@@ -97,6 +127,8 @@ export default function AppShell({
         body: JSON.stringify({
           selectedBulletIds: selectedIds,
           curatedSkills,
+          bulletTextOverrides,
+          bulletLabelOverrides,
         }),
       });
       if (!res.ok) {
@@ -231,6 +263,8 @@ export default function AppShell({
                 allBullets={allBullets}
                 selectedIds={selectedIds}
                 onToggle={handleToggleBullet}
+                bulletTextOverrides={bulletTextOverrides}
+                bulletLabelOverrides={bulletLabelOverrides}
               />
             </div>
 
@@ -267,6 +301,8 @@ export default function AppShell({
                   setSelectedIds([]);
                   setCuratedSkills([]);
                   setReasoning("");
+                  setBulletTextOverrides({});
+                  setBulletLabelOverrides({});
                 }}
                 className="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
               >
@@ -278,13 +314,19 @@ export default function AppShell({
           {/* Right panel — preview */}
           <div className="w-[60%] overflow-auto flex justify-center">
             <div
-              className={`transform origin-top scale-[0.7] ${isOverflowing ? "ring-4 ring-red-500 rounded" : ""}`}
+              style={{ zoom: 0.7 }}
+              className={`origin-top ${isOverflowing ? "ring-4 ring-red-500 rounded" : ""}`}
             >
               <ResumePreview
                 selectedBullets={selectedBullets}
                 curatedSkills={curatedSkills}
                 profile={profile}
                 onOverflow={handleOverflow}
+                bulletTextOverrides={bulletTextOverrides}
+                bulletLabelOverrides={bulletLabelOverrides}
+                onBulletEdit={handleBulletTextEdit}
+                onBulletLabelEdit={handleBulletLabelEdit}
+                onBulletReset={handleBulletReset}
               />
             </div>
           </div>

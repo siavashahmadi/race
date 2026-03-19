@@ -32,9 +32,14 @@ function PrintContent() {
   if (!state) return <div>Loading...</div>;
 
   const allBullets = experienceBank as Bullet[];
-  const selectedBullets = allBullets.filter((b) =>
-    state.selectedBulletIds.includes(b.id)
-  );
+  const selectedBullets = allBullets
+    .filter((b) => state.selectedBulletIds.includes(b.id))
+    .map((b) => {
+      let result = b;
+      if (state.bulletTextOverrides && b.id in state.bulletTextOverrides) result = { ...result, text: state.bulletTextOverrides[b.id] };
+      if (state.bulletLabelOverrides && b.id in state.bulletLabelOverrides) result = { ...result, label: state.bulletLabelOverrides[b.id] };
+      return result;
+    });
 
   return (
     <div style={{ width: "816px", margin: "0 auto", transform: "none" }}>
