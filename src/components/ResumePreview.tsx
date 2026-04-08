@@ -14,6 +14,7 @@ interface ResumePreviewProps {
   onBulletEdit?: (id: string, newText: string) => void;
   onBulletLabelEdit?: (id: string, newLabel: string) => void;
   onBulletReset?: (id: string) => void;
+  onSkillEdit?: (category: string, newItems: string) => void;
 }
 
 export default function ResumePreview({
@@ -26,6 +27,7 @@ export default function ResumePreview({
   onBulletEdit,
   onBulletLabelEdit,
   onBulletReset,
+  onSkillEdit,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -90,7 +92,15 @@ export default function ResumePreview({
           <div className="space-y-1" style={{ fontSize: "10pt" }}>
             {curatedSkills.map((cat) => (
               <p key={cat.category}>
-                <strong>{cat.category}:</strong> {cat.items.join(", ")}
+                <strong>{cat.category}:</strong>{" "}
+                {onSkillEdit ? (
+                  <EditableText
+                    text={cat.items.join(", ")}
+                    onCommit={(newText) => onSkillEdit(cat.category, newText)}
+                  />
+                ) : (
+                  cat.items.join(", ")
+                )}
               </p>
             ))}
           </div>

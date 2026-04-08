@@ -11,7 +11,6 @@ import type {
   SkillCategory,
   SkillBankCategory,
   Profile,
-  AnalyzeResponse,
 } from "../types";
 import type { DemoScenario } from "../data/demos";
 
@@ -59,6 +58,13 @@ export default function AppShell({
     setBulletLabelOverrides((prev) => ({ ...prev, [id]: newLabel }));
   }, []);
 
+  const handleSkillEdit = useCallback((category: string, newItems: string) => {
+    const items = newItems.split(",").map((s) => s.trim()).filter(Boolean);
+    setCuratedSkills((prev) =>
+      prev.map((c) => (c.category === category ? { ...c, items } : c))
+    );
+  }, []);
+
   const handleBulletReset = useCallback((id: string) => {
     setBulletTextOverrides((prev) => {
       const next = { ...prev };
@@ -72,23 +78,25 @@ export default function AppShell({
     });
   }, []);
 
-  const handleAnalyze = async (jd: string) => {
+  const handleAnalyze = async (jd: string, mode: "curate" | "optimize" = "curate") => {
     setIsAnalyzing(true);
     setError("");
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobDescription: jd }),
+        body: JSON.stringify({ jobDescription: jd, mode }),
       });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Analysis failed");
       }
-      const data: AnalyzeResponse = await res.json();
+      const data = await res.json();
       setSelectedIds(data.selectedBulletIds);
       setCuratedSkills(data.curatedSkills);
       setReasoning(data.reasoning);
+      setBulletTextOverrides(data.bulletTextOverrides || {});
+      setBulletLabelOverrides(data.bulletLabelOverrides || {});
       setHasAnalyzed(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -327,6 +335,7 @@ export default function AppShell({
                 onBulletEdit={handleBulletTextEdit}
                 onBulletLabelEdit={handleBulletLabelEdit}
                 onBulletReset={handleBulletReset}
+                onSkillEdit={handleSkillEdit}
               />
             </div>
           </div>
