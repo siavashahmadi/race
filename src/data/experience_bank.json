@@ -4,72 +4,90 @@
     "company": "Joulea",
     "category": ["Full-Stack", "Systems"],
     "label": "Full-Stack SaaS Architecture",
-    "text": "Architected full-stack B2B SaaS platform spanning React, Redux, TypeScript, Three.js, Flask, and AWS infrastructure - EC2, S3, Lambda, CloudFront, RDS Aurora, Redis, with automated pipelines. End-to-end ownership of the full stack.",
+    "text": "Architected full-stack B2B SaaS platform across React, Flask, and AWS with end-to-end ownership; designed a microservice architecture with clear service boundaries across admin, dashboards, analytics, and user management domains with automated CI/CD via GitHub Actions.",
     "priority": 1,
-    "charCount": 232
+    "charCount": 271
   },
   {
     "id": "j2-data",
     "company": "Joulea",
-    "category": ["Backend", "Data"],
+    "category": ["Backend", "Data", "ML"],
     "label": "High-Throughput Data & APIs",
-    "text": "Designed scalable, RESTful APIs using Python and Flask for large-scale HVAC data streamed through RabbitMQ to a PostgreSQL database for fault detection and diagnosis that delivered 25% cost savings. Migrated data to S3 using AWS Glue to save 57% on cost, queried via Athena-backed APIs for analytics.",
+    "text": "Designed fault-tolerant IoT ingestion pipeline processing 10M+ data points daily through RabbitMQ, machine learning-based normalization, fault detection, and database persistence; integrated VOLTTRON for message replay during network outages ensuring zero data loss; resolved intermittent data gaps via root cause analysis and implemented retry logic with exponential backoff.",
     "priority": 1,
-    "charCount": 301
+    "charCount": 370
   },
   {
     "id": "j3-llm",
     "company": "Joulea",
     "category": ["AI", "Full-Stack"],
     "label": "LLM-Powered Support Chatbot",
-    "text": "Collaborated with AI Engineers to build an agent-based LLM+RAG chatbot using LangChain and LlamaIndex, achieving 85% response accuracy validated through internal subject matter testing.",
+    "text": "Designed agent-based RAG system using LangChain and LlamaIndex with FAISS vector search for semantic retrieval across building documentation; implemented conversation memory and context windowing for multi-turn interactions, achieving 85% response accuracy validated through SME testing.",
     "priority": 1,
-    "charCount": 186
+    "charCount": 287
   },
   {
     "id": "j4-ai-label",
     "company": "Joulea",
-    "category": ["AI", "Data"],
-    "label": "Generative-AI Data Labeling",
-    "text": "Deployed a generative-AI labeling workflow using OpenAI API to label unstructured IoT data for analysis, increasing speed by 67% and automating a manual process while maintaining 90% labeling accuracy.",
+    "category": ["AI", "ML", "Data"],
+    "label": "Generative AI Data Labeling & ML Pipeline",
+    "text": "Deployed OpenAI API-based machine learning workflow to normalize and classify unstructured IoT sensor data (e.g., TMP vs TEMP vendor variations) using NLP techniques and embedding-based similarity matching; eliminated a manual process while increasing labeling speed by 67% and maintaining 90% accuracy.",
     "priority": 1,
-    "charCount": 202
+    "charCount": 301
   },
   {
-    "id": "j5-pm",
+    "id": "j5-ml",
+    "company": "Joulea",
+    "category": ["ML", "Data"],
+    "label": "ML Model Development & Evaluation",
+    "text": "Built and fine-tuned classification models using Scikit-learn and Python to detect HVAC fault patterns from time-series sensor data; designed feature engineering pipelines to extract meaningful signals from raw IoT streams, improving fault detection precision across 200+ commercial buildings.",
+    "priority": 1,
+    "charCount": 289
+  },
+  {
+    "id": "j6-predict",
+    "company": "Joulea",
+    "category": ["ML", "Data", "Analytics"],
+    "label": "Predictive Analytics & Energy Optimization",
+    "text": "Developed machine learning models for predictive energy consumption analysis, leveraging historical sensor data and weather patterns to forecast building performance and support capital planning decisions that contributed to 25% energy cost savings.",
+    "priority": 1,
+    "charCount": 245
+  },
+  {
+    "id": "j7-pm",
     "company": "Joulea",
     "category": ["Leadership", "Process"],
     "label": "Product & Stakeholder Alignment",
-    "text": "Partnered with Product, UX, and Customer Success to translate evolving B2B requirements into weekly releases.",
+    "text": "Partnered with Product, UX, and Customer Success to translate evolving B2B requirements into technical specs and weekly feature releases; led architectural decision records (ADRs) for major infrastructure changes communicated across engineering and business stakeholders.",
     "priority": 2,
-    "charCount": 109
+    "charCount": 271
   },
   {
     "id": "tm1-fe",
     "company": "T-Mobile",
     "category": ["Frontend", "UI"],
     "label": "Enterprise Application Development",
-    "text": "Built Angular components for prepaid.t-mobile.com serving 20M+ users, implementing responsive design and cross-browser compatibility.",
+    "text": "Built and maintained a component-based Angular application for prepaid.t-mobile.com serving 20M+ prepaid customers; implemented lazy loading, tree shaking, and code splitting to cut initial load time by 40%; built PCI-compliant payment portal with secure transaction workflows.",
     "priority": 1,
-    "charCount": 134
+    "charCount": 275
   },
   {
     "id": "tm2-micro",
     "company": "T-Mobile",
     "category": ["Backend", "Systems"],
     "label": "Microservices & Payment Systems",
-    "text": "Developed Java and Spring Boot microservices processing 5K+ daily transactions with enterprise-grade security and OAuth 2.0 protocols.",
+    "text": "Developed Java/Spring Boot microservices processing 5,000+ daily payment transactions at 99.9% uptime; designed REST and SOAP APIs bridging legacy mainframe billing to modern applications using adapter pattern for XML-to-JSON translation.",
     "priority": 1,
-    "charCount": 135
+    "charCount": 240
   },
   {
     "id": "tm3-api",
     "company": "T-Mobile",
-    "category": ["Backend", "API"],
-    "label": "API Integration",
-    "text": "Designed REST and SOAP APIs to connect legacy billing systems with modern applications following enterprise architecture standards and PCI compliant guidelines.",
+    "category": ["Backend", "API", "Data"],
+    "label": "API Integration & Data Pipeline Design",
+    "text": "Designed REST and SOAP APIs integrating legacy billing systems with modern payment applications, implementing data transformation pipelines following enterprise architecture and PCI-compliant standards.",
     "priority": 1,
-    "charCount": 159
+    "charCount": 199
   },
   {
     "id": "tm4-docs",
@@ -81,13 +99,13 @@
     "charCount": 124
   },
   {
-    "id": "tm5-incident",
+    "id": "tm4-incident",
     "company": "T-Mobile",
     "category": ["Systems", "Leadership"],
-    "label": "Incident Response Leadership",
-    "text": "Led 40+ critical system responses, implementing Splunk monitoring dashboards that improved resolution times and communicated issues with stakeholders.",
+    "label": "Monitoring & Incident Response",
+    "text": "Led 40+ critical system responses and implemented Splunk monitoring dashboards with automated alerting, improving mean resolution time and maintaining cross-team stakeholder communication during incidents.",
     "priority": 2,
-    "charCount": 149
+    "charCount": 202
   },
   {
     "id": "cv1-test",
