@@ -4,41 +4,41 @@
     "canonicalOrder": 1,
     "minDisplay": 4,
     "maxDisplay": 7,
-    "items": ["JavaScript (Modern/ES6+)", "TypeScript", "Python", "Kotlin", "SQL", "HTML5", "CSS3/Sass", "Go", "Swift", "C++"]
+    "items": ["JavaScript", "TypeScript", "Python", "Java", "SQL", "HTML5", "CSS3"]
   },
   {
     "category": "Frontend & UI",
     "canonicalOrder": 2,
     "minDisplay": 3,
     "maxDisplay": 6,
-    "items": ["React", "Angular", "Vue.js", "Next.js", "Tailwind CSS", "Chakra UI", "Storybook", "Svelte"]
+    "items": ["React", "Angular", "Vue.js", "Redux", "Material UI", "Bootstrap", "Three.js"]
   },
   {
     "category": "Backend & Data",
     "canonicalOrder": 3,
     "minDisplay": 4,
     "maxDisplay": 8,
-    "items": ["Node.js", "Django", "FastAPI", "Spring Boot", "GraphQL", "PostgreSQL", "MongoDB", "Cassandra", "Redis", "Kafka", "RabbitMQ", "Express.js"]
+    "items": ["Flask", "FastAPI", "Node.js", "Spring Boot", "GraphQL", "PostgreSQL", "MySQL", "MongoDB", "DynamoDB", "Redis", "RabbitMQ"]
   },
   {
     "category": "Cloud & DevOps",
     "canonicalOrder": 4,
     "minDisplay": 4,
     "maxDisplay": 10,
-    "items": ["AWS (EC2, S3, Lambda, RDS, EKS)", "GCP", "Azure", "Docker", "Kubernetes", "Pulumi", "Datadog", "Grafana", "ArgoCD", "Git", "GitHub Actions", "GitLab CI"]
+    "items": ["AWS (EC2, S3, Lambda, RDS, EKS, Glue)", "Docker", "GitHub", "GitLab", "Jenkins", "AWS CloudWatch", "AWS Athena", "AWS CloudFront"]
   },
   {
     "category": "AI Engineering",
     "canonicalOrder": 5,
     "minDisplay": 3,
     "maxDisplay": 8,
-    "items": ["LangChain", "LangGraph", "Semantic Kernel", "Vector Databases (FAISS, Pinecone)", "RAG Architecture", "OpenAI API", "Claude API", "Prompt Engineering", "MLflow"]
+    "items": ["LangChain", "LangGraph", "LlamaIndex", "RAG Architecture", "OpenAI API", "Claude API", "Vector Databases (FAISS, Pinecone)", "Prompt Engineering"]
   },
   {
     "category": "AI Productivity",
     "canonicalOrder": 6,
-    "minDisplay": 3,
-    "maxDisplay": 6,
-    "items": ["Claude Code", "Cursor", "GitHub Copilot", "Windsurf", "AI Workflows & Guardrails", "v0"]
+    "minDisplay": 2,
+    "maxDisplay": 5,
+    "items": ["Claude Code", "Cursor", "Windsurf", "GitHub Copilot"]
   }
 ]

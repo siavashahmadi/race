@@ -1,254 +1,110 @@
 [
   {
-    "id": "g1-arch",
-    "company": "Google",
-    "category": [
-      "Systems",
-      "Full-Stack"
-    ],
+    "id": "j1-arch",
+    "company": "Joulea",
+    "category": ["Full-Stack", "Systems"],
     "label": "Full-Stack SaaS Architecture",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed and implemented scalable microservices architecture serving enterprise clients with high availability requirements.",
+    "text": "Architected full-stack B2B SaaS platform spanning React, Redux, TypeScript, Three.js, Flask, and AWS infrastructure - EC2, S3, Lambda, CloudFront, RDS Aurora, Redis, with automated pipelines. End-to-end ownership of the full stack.",
     "priority": 1,
-    "charCount": 181
+    "charCount": 232
   },
   {
-    "id": "g2-llm",
-    "company": "Google",
-    "category": [
-      "AI",
-      "Full-Stack"
-    ],
+    "id": "j2-data",
+    "company": "Joulea",
+    "category": ["Backend", "Data"],
+    "label": "High-Throughput Data & APIs",
+    "text": "Designed scalable, RESTful APIs using Python and Flask for large-scale HVAC data streamed through RabbitMQ to a PostgreSQL database for fault detection and diagnosis that delivered 25% cost savings. Migrated data to S3 using AWS Glue to save 57% on cost, queried via Athena-backed APIs for analytics.",
+    "priority": 1,
+    "charCount": 301
+  },
+  {
+    "id": "j3-llm",
+    "company": "Joulea",
+    "category": ["AI", "Full-Stack"],
     "label": "LLM-Powered Support Chatbot",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Built an intelligent chatbot using RAG architecture with vector embeddings for context-aware customer support.",
+    "text": "Collaborated with AI Engineers to build an agent-based LLM+RAG chatbot using LangChain and LlamaIndex, achieving 85% response accuracy validated through internal subject matter testing.",
     "priority": 1,
-    "charCount": 167
+    "charCount": 186
   },
   {
-    "id": "g3-data",
-    "company": "Google",
-    "category": [
-      "Backend",
-      "Data"
-    ],
-    "label": "Real-Time Data Pipeline",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Engineered high-throughput data ingestion pipeline processing millions of IoT sensor readings with sub-second latency.",
+    "id": "j4-ai-label",
+    "company": "Joulea",
+    "category": ["AI", "Data"],
+    "label": "Generative-AI Data Labeling",
+    "text": "Deployed a generative-AI labeling workflow using OpenAI API to label unstructured IoT data for analysis, increasing speed by 67% and automating a manual process while maintaining 90% labeling accuracy.",
     "priority": 1,
-    "charCount": 175
+    "charCount": 202
   },
   {
-    "id": "g4-cloud",
-    "company": "Google",
-    "category": [
-      "Cloud",
-      "DevOps"
-    ],
-    "label": "Cloud Infrastructure & CI/CD",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orchestrated cloud infrastructure with Terraform, implementing blue-green deployments and automated scaling policies.",
+    "id": "j5-pm",
+    "company": "Joulea",
+    "category": ["Leadership", "Process"],
+    "label": "Product & Stakeholder Alignment",
+    "text": "Partnered with Product, UX, and Customer Success to translate evolving B2B requirements into weekly releases.",
     "priority": 2,
-    "charCount": 174
+    "charCount": 109
   },
   {
-    "id": "g5-api",
-    "company": "Google",
-    "category": [
-      "Backend",
-      "API"
-    ],
-    "label": "API Platform & Developer Experience",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed RESTful and GraphQL APIs with comprehensive documentation, serving internal and external developer consumers.",
-    "priority": 2,
-    "charCount": 175
+    "id": "tm1-fe",
+    "company": "T-Mobile",
+    "category": ["Frontend", "UI"],
+    "label": "Enterprise Application Development",
+    "text": "Built Angular components for prepaid.t-mobile.com serving 20M+ users, implementing responsive design and cross-browser compatibility.",
+    "priority": 1,
+    "charCount": 134
   },
   {
-    "id": "g6-fe",
-    "company": "Google",
-    "category": [
-      "Frontend",
-      "UI"
-    ],
-    "label": "Interactive Dashboard & Visualization",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed responsive React dashboards with real-time charting, enabling customers to monitor usage patterns across services.",
-    "priority": 2,
-    "charCount": 181
-  },
-  {
-    "id": "g7-perf",
-    "company": "Google",
-    "category": [
-      "Backend",
-      "Performance"
-    ],
-    "label": "Performance Optimization",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Reduced API response times by optimizing database queries and implementing intelligent caching strategies across the platform.",
-    "priority": 2,
-    "charCount": 183
-  },
-  {
-    "id": "g8-test",
-    "company": "Google",
-    "category": [
-      "Testing",
-      "Quality"
-    ],
-    "label": "Testing & Quality Assurance",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Established comprehensive test suite with unit, integration, and end-to-end tests achieving high code coverage.",
-    "priority": 3,
-    "charCount": 168
-  },
-  {
-    "id": "g9-auth",
-    "company": "Google",
-    "category": [
-      "Security",
-      "Backend"
-    ],
-    "label": "Authentication & Authorization",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Implemented role-based access control with OAuth 2.0 and JWT tokens for multi-tenant enterprise security.",
-    "priority": 3,
-    "charCount": 162
-  },
-  {
-    "id": "g10-mentor",
-    "company": "Google",
-    "category": [
-      "Leadership",
-      "Process"
-    ],
-    "label": "Technical Mentorship & Code Review",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mentored junior engineers through structured code reviews, pair programming sessions, and technical documentation.",
-    "priority": 3,
-    "charCount": 171
-  },
-  {
-    "id": "m1-micro",
-    "company": "Meta",
-    "category": [
-      "Backend",
-      "Systems"
-    ],
+    "id": "tm2-micro",
+    "company": "T-Mobile",
+    "category": ["Backend", "Systems"],
     "label": "Microservices & Payment Systems",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Built distributed payment processing microservices handling high transaction volumes with fault tolerance.",
+    "text": "Developed Java and Spring Boot microservices processing 5K+ daily transactions with enterprise-grade security and OAuth 2.0 protocols.",
     "priority": 1,
-    "charCount": 163
+    "charCount": 135
   },
   {
-    "id": "m2-api",
-    "company": "Meta",
-    "category": [
-      "Backend",
-      "API"
-    ],
-    "label": "Enterprise API Development",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed enterprise-grade RESTful APIs with comprehensive authentication and rate limiting for internal platforms.",
+    "id": "tm3-api",
+    "company": "T-Mobile",
+    "category": ["Backend", "API"],
+    "label": "API Integration",
+    "text": "Designed REST and SOAP APIs to connect legacy billing systems with modern applications following enterprise architecture standards and PCI compliant guidelines.",
     "priority": 1,
-    "charCount": 172
+    "charCount": 159
   },
   {
-    "id": "m3-fe",
-    "company": "Meta",
-    "category": [
-      "Frontend",
-      "UI"
-    ],
-    "label": "Customer Portal Redesign",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Led frontend redesign of customer-facing portal using React with responsive design and accessibility compliance.",
+    "id": "tm4-docs",
+    "company": "T-Mobile",
+    "category": ["Leadership", "Process"],
+    "label": "Technical Documentation & Training",
+    "text": "Authored significant technical documentation and conducted 20+ knowledge transfer sessions, reducing onboarding time by 30%.",
+    "priority": 2,
+    "charCount": 124
+  },
+  {
+    "id": "tm5-incident",
+    "company": "T-Mobile",
+    "category": ["Systems", "Leadership"],
+    "label": "Incident Response Leadership",
+    "text": "Led 40+ critical system responses, implementing Splunk monitoring dashboards that improved resolution times and communicated issues with stakeholders.",
+    "priority": 2,
+    "charCount": 149
+  },
+  {
+    "id": "cv1-test",
+    "company": "Cvent",
+    "category": ["Testing", "Quality"],
+    "label": "Test Automation",
+    "text": "Developed Java and Selenium automated test cases for event management workflows, reducing manual testing effort and boosting the test suite coverage.",
     "priority": 1,
-    "charCount": 169
+    "charCount": 149
   },
   {
-    "id": "m4-cloud",
-    "company": "Meta",
-    "category": [
-      "Cloud",
-      "DevOps"
-    ],
-    "label": "Cloud Migration & Containerization",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Migrated legacy monolith to containerized microservices on Kubernetes with automated CI/CD pipelines.",
-    "priority": 2,
-    "charCount": 158
-  },
-  {
-    "id": "m5-data",
-    "company": "Meta",
-    "category": [
-      "Data",
-      "Analytics"
-    ],
-    "label": "Data Analytics & Reporting",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Designed analytics dashboards processing social platform data for business intelligence and operational insights.",
-    "priority": 2,
-    "charCount": 170
-  },
-  {
-    "id": "m6-agile",
-    "company": "Meta",
-    "category": [
-      "Process",
-      "Leadership"
-    ],
-    "label": "Agile Process & Sprint Leadership",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilitated agile ceremonies and drove sprint planning for cross-functional team delivering quarterly releases.",
-    "priority": 2,
-    "charCount": 168
-  },
-  {
-    "id": "m7-test",
-    "company": "Meta",
-    "category": [
-      "Testing",
-      "Quality"
-    ],
-    "label": "Automated Testing Framework",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Implemented automated testing framework with Selenium and Jest reducing regression testing time significantly.",
-    "priority": 3,
-    "charCount": 167
-  },
-  {
-    "id": "m8-perf",
-    "company": "Meta",
-    "category": [
-      "Performance",
-      "Backend"
-    ],
-    "label": "Application Performance Tuning",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Profiled and optimized application bottlenecks reducing latency and improving throughput for high-traffic services.",
-    "priority": 3,
-    "charCount": 172
-  },
-  {
-    "id": "s1-intern",
-    "company": "Stripe",
-    "category": [
-      "Full-Stack",
-      "Frontend"
-    ],
-    "label": "Payment Platform Feature Development",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Contributed to payment platform features using React and Ruby on Rails in an agile environment.",
+    "id": "cv2-algo",
+    "company": "Cvent",
+    "category": ["Backend", "Data"],
+    "label": "Business Impact Development",
+    "text": "Contributed to Lead Scoring algorithm using Java/SQL, reducing hoteliers' response time on event inquiries by over 90%.",
     "priority": 1,
-    "charCount": 152
-  },
-  {
-    "id": "s2-test",
-    "company": "Stripe",
-    "category": [
-      "Testing",
-      "Quality"
-    ],
-    "label": "Test Automation & QA",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Developed automated test suites for checkout workflow ensuring reliability across browser environments.",
-    "priority": 2,
-    "charCount": 160
-  },
-  {
-    "id": "s3-api",
-    "company": "Stripe",
-    "category": [
-      "Backend",
-      "API"
-    ],
-    "label": "REST API Integration",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integrated third-party vendor APIs for payment processing and notification services within the platform.",
-    "priority": 2,
-    "charCount": 161
+    "charCount": 119
   }
 ]

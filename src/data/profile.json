@@ -1,11 +1,11 @@
 {
-  "name": "Jane Doe",
-  "phone": "555-123-4567",
-  "email": "jane.doe@example.com",
-  "linkedin": "linkedin.com/in/janedoe",
+  "name": "Siavash Ahmadi",
+  "phone": "678-467-7239",
+  "email": "siavashahmadi1998@gmail.com",
+  "linkedin": "linkedin.com/in/siaahmadi",
   "education": {
-    "school": "University of California, Los Angeles",
+    "school": "Georgia State University",
     "degree": "Bachelor of Science in Computer Science",
-    "graduationDate": "Jun 2020"
+    "graduationDate": "Dec 2020"
   }
 }

@@ -1,23 +1,23 @@
 [
   {
-    "name": "Google",
-    "role": "Software Engineer",
+    "name": "Joulea",
+    "role": "Senior Software Engineer, AI",
     "dates": "May 2023 – Present",
-    "location": "New York, NY",
+    "location": "Atlanta, GA",
     "order": 1
   },
   {
-    "name": "Meta",
-    "role": "Associate Software Engineer",
-    "dates": "May 2021 – Jan 2023",
-    "location": "New York, NY",
+    "name": "T-Mobile",
+    "role": "Software Engineer",
+    "dates": "May 2021 – January 2023",
+    "location": "Atlanta, GA",
     "order": 2
   },
   {
-    "name": "Stripe",
-    "role": "Software Engineering Intern",
-    "dates": "Jun 2020 – Aug 2020",
-    "location": "Los Angeles, CA",
+    "name": "Cvent",
+    "role": "Quality Engineer Intern",
+    "dates": "June 2019 – August 2019",
+    "location": "Atlanta, GA",
     "order": 3
   }
 ]
