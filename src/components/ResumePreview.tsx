@@ -33,10 +33,9 @@ export default function ResumePreview({
 
   useLayoutEffect(() => {
     if (ref.current && onOverflow) {
-      const height = ref.current.scrollHeight;
-      const threshold = 1056; // 11in * 96dpi — matches the container's minHeight
-      const isOver = height > threshold;
-      console.log(`[ResumePreview] scrollHeight: ${height}px, threshold: ${threshold}px, overflowing: ${isOver}`);
+      // 20px tolerance accounts for minor rendering differences between
+      // the browser preview and Puppeteer's PDF output
+      const isOver = ref.current.scrollHeight > ref.current.clientHeight + 20;
       onOverflow(isOver);
     }
   }, [selectedBullets, curatedSkills, onOverflow]);
@@ -55,7 +54,8 @@ export default function ResumePreview({
       className="resume-page bg-white"
       style={{
         width: "8.5in",
-        minHeight: "11in",
+        height: "11in",
+        overflow: "hidden",
         padding: "0.5in",
         boxSizing: "border-box",
         fontFamily: "'Inter', sans-serif",
