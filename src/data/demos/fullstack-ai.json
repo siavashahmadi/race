@@ -1,6 +1,6 @@
 {
   "title": "Full-Stack AI Engineer",
-  "jobDescription": "Join our AI team to build intelligent applications that leverage large language models. You'll develop full-stack features using React/Next.js on the frontend and Python/Node.js on the backend, integrating LLM APIs (OpenAI, Anthropic) with RAG pipelines and vector databases. Experience with LangChain, prompt engineering, and building production AI systems is highly desired. You should be comfortable with cloud deployment (AWS), Docker, and monitoring AI systems in production.",
+  "jobDescription": "Join our AI team to build intelligent applications that leverage large language models. You'll develop full-stack features using React/Next.js on the frontend and Python/Node.js on the backend, integrating LLM APIs (OpenAI, Anthropic) with RAG pipelines and vector databases. Experience with LangChain, and building production AI systems is highly desired. You should be comfortable with cloud deployment (AWS), Docker, and monitoring AI systems in production.",
   "result": {
     "selectedBulletIds": [
       "g2-llm",
@@ -17,7 +17,7 @@
     "curatedSkills": [
       {
         "category": "AI Engineering",
-        "items": ["LangChain", "LangGraph", "RAG Architecture", "Vector Databases (FAISS, Pinecone)", "OpenAI API", "Claude API", "Prompt Engineering"]
+        "items": ["LangChain", "LangGraph", "RAG Architecture", "Vector Databases (FAISS, Pinecone)", "OpenAI API", "Claude API"]
       },
       {
         "category": "Programming Languages",

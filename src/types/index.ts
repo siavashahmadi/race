@@ -5,6 +5,7 @@ import {
   SkillCategorySchema,
   ProfileSchema,
   AnalyzeResponseSchema,
+  OptimizeResponseSchema,
   ResumeStateSchema,
 } from "../lib/schemas";
 
@@ -13,5 +14,6 @@ export type SkillBankCategory = z.infer<typeof SkillBankCategorySchema>;
 export type SkillCategory = z.infer<typeof SkillCategorySchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
 export type AnalyzeResponse = z.infer<typeof AnalyzeResponseSchema>;
+export type OptimizeResponse = z.infer<typeof OptimizeResponseSchema>;
 export type ResumeState = z.infer<typeof ResumeStateSchema>;
 export type Company = z.infer<typeof import("../lib/schemas").CompanyEnum>;

@@ -39,12 +39,20 @@ export const ProfileSchema = z.object({
   }),
 });
 
-export const AnalyzeRequestSchema = z.object({ jobDescription: z.string() });
+export const AnalyzeRequestSchema = z.object({
+  jobDescription: z.string(),
+  mode: z.enum(["curate", "optimize"]).default("curate"),
+});
 
 export const AnalyzeResponseSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   curatedSkills: z.array(SkillCategorySchema),
   reasoning: z.string(),
+});
+
+export const OptimizeResponseSchema = AnalyzeResponseSchema.extend({
+  bulletTextOverrides: z.record(z.string(), z.string()).default({}),
+  bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
 });
 
 export const ExportRequestSchema = z.object({

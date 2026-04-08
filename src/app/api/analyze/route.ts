@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { AnalyzeRequestSchema } from "../../../lib/schemas";
-import { analyzeJobDescription } from "../../../lib/claude";
+import { analyzeJobDescription, optimizeForRole } from "../../../lib/claude";
 import experienceBank from "../../../data/experience_bank.json";
 import skillsBank from "../../../data/skills_bank.json";
 import type { Bullet, SkillBankCategory } from "../../../types";
@@ -24,11 +24,18 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await analyzeJobDescription(
-      parsed.data.jobDescription,
-      experienceBank as Bullet[],
-      skillsBank as SkillBankCategory[]
-    );
+    const result =
+      parsed.data.mode === "optimize"
+        ? await optimizeForRole(
+            parsed.data.jobDescription,
+            experienceBank as Bullet[],
+            skillsBank as SkillBankCategory[]
+          )
+        : await analyzeJobDescription(
+            parsed.data.jobDescription,
+            experienceBank as Bullet[],
+            skillsBank as SkillBankCategory[]
+          );
 
     return NextResponse.json(result);
   } catch (err) {
