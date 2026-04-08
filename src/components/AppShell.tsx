@@ -167,14 +167,6 @@ export default function AppShell({
             </span>
           )}
         </h1>
-        {!hasAnalyzed && !isAnalyzing && !demoMode && (
-          <button
-            onClick={handleManualMode}
-            className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Build Manually
-          </button>
-        )}
       </header>
 
       {error && (
@@ -219,6 +211,14 @@ export default function AppShell({
                 Step 1: Paste Job Description
               </h2>
               <JDInput onAnalyze={handleAnalyze} isLoading={isAnalyzing} />
+              {!isAnalyzing && (
+                <button
+                  onClick={handleManualMode}
+                  className="mt-3 w-full py-2 px-4 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Build Manually
+                </button>
+              )}
             </div>
           )}
 
