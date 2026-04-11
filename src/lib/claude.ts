@@ -39,7 +39,9 @@ For skills curation:
 - Select items within each category (respect minDisplay/maxDisplay bounds)
 - Order items within categories by JD relevance (most relevant first)
 - Default to canonical category order unless JD strongly warrants reordering
-- If the JD mentions a technology, ensure it appears in the relevant category`;
+- If the JD mentions a technology, ensure it appears in the relevant category
+
+Additionally, extract 10-25 important keywords from the job description: specific technologies, frameworks, methodologies, domain terms, and key qualifications. Exclude generic words like "team", "experience", "responsibilities". Use specific terms — e.g., "Golang" not "Go", "Kubernetes" not "K8s". Avoid keywords shorter than 3 characters.`;
 
   const userPrompt = `## Job Description
 ${jd}
@@ -86,8 +88,14 @@ Analyze the job description and select the most relevant bullets and skills. Use
           description:
             "Brief explanation of why these bullets and skills were selected for this JD",
         },
+        keywords: {
+          type: "array" as const,
+          items: { type: "string" as const },
+          description:
+            "10-25 important keywords from the JD: specific technologies, frameworks, methodologies, domain terms, key qualifications. Exclude generic words.",
+        },
       },
-      required: ["selectedBulletIds", "curatedSkills", "reasoning"],
+      required: ["selectedBulletIds", "curatedSkills", "reasoning", "keywords"],
     },
   };
 
@@ -144,6 +152,7 @@ function fallbackSelection(
     curatedSkills: getDefaultSkills(skillsBank),
     reasoning:
       "Fallback selection based on priority ranking (AI response contained invalid IDs).",
+    keywords: [],
   };
 }
 
@@ -176,7 +185,9 @@ For skills curation:
 - Select items within each category
 - Order items by JD relevance (most relevant first)
 - You MAY add skills mentioned in the JD that are not in the candidate's bank, if they are plausible adjacent skills the candidate could credibly claim based on their experience
-- If the JD mentions a specific framework/tool and the candidate has experience with a similar one, include the JD's version`;
+- If the JD mentions a specific framework/tool and the candidate has experience with a similar one, include the JD's version
+
+Additionally, extract 10-25 important keywords from the job description: specific technologies, frameworks, methodologies, domain terms, and key qualifications. Exclude generic words like "team", "experience", "responsibilities". Use specific terms — e.g., "Golang" not "Go", "Kubernetes" not "K8s". Avoid keywords shorter than 3 characters.`;
 
   const userPrompt = `## Job Description
 ${jd}
@@ -234,12 +245,19 @@ Analyze the JD, select the most relevant bullets, rewrite their text to align wi
           description:
             "Explain what was changed and why for each rewritten bullet",
         },
+        keywords: {
+          type: "array" as const,
+          items: { type: "string" as const },
+          description:
+            "10-25 important keywords from the JD: specific technologies, frameworks, methodologies, domain terms, key qualifications. Exclude generic words.",
+        },
       },
       required: [
         "selectedBulletIds",
         "bulletTextOverrides",
         "curatedSkills",
         "reasoning",
+        "keywords",
       ],
     },
   };
@@ -273,6 +291,7 @@ Analyze the JD, select the most relevant bullets, rewrite their text to align wi
       ...fallbackSelection(bullets, skillsBank),
       bulletTextOverrides: {},
       bulletLabelOverrides: {},
+      keywords: [],
     };
   }
 
