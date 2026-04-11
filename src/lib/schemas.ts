@@ -48,6 +48,7 @@ export const AnalyzeResponseSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   curatedSkills: z.array(SkillCategorySchema),
   reasoning: z.string(),
+  keywords: z.array(z.string()).default([]),
 });
 
 export const OptimizeResponseSchema = AnalyzeResponseSchema.extend({
@@ -67,4 +68,21 @@ export const ResumeStateSchema = z.object({
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+});
+
+export const SavedResumeSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  savedAt: z.string(),
+  jdSnippet: z.string().default(""),
+  selectedBulletIds: z.array(z.string()),
+  curatedSkills: z.array(SkillCategorySchema),
+  bulletTextOverrides: z.record(z.string(), z.string()).default({}),
+  bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  keywords: z.array(z.string()).default([]),
+});
+
+export const SavedResumeStoreSchema = z.object({
+  version: z.literal(1),
+  entries: z.array(SavedResumeSchema),
 });
