@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import { join } from "path";
-import type { Bullet, SkillBankCategory, Profile, Company } from "../types";
+import type { Bullet, SkillBankCategory, Profile } from "../types";
 
 import baseProfile from "../data/profile.json";
 import baseExperienceBank from "../data/experience_bank.json";
@@ -33,10 +33,10 @@ export async function loadSkillsBank(): Promise<SkillBankCategory[]> {
   return baseSkillsBank as SkillBankCategory[];
 }
 
-export async function loadCompanies(): Promise<Company[]> {
-  return loadWithOverride<Company[]>(
+export async function loadCompanies() {
+  return loadWithOverride(
     "companies.json",
-    baseCompanies as Company[]
+    baseCompanies as typeof baseCompanies
   );
 }
 

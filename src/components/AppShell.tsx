@@ -5,12 +5,16 @@ import JDInput from "./JDInput";
 import BulletToggle from "./BulletToggle";
 import SkillsEditor from "./SkillsEditor";
 import ResumePreview from "./ResumePreview";
+import KeywordGap from "./KeywordGap";
+import SavedResumes from "./SavedResumes";
 import { getDefaultSkills } from "../lib/resume-constants";
+import { saveResume, duplicateResume } from "../lib/storage";
 import type {
   Bullet,
   SkillCategory,
   SkillBankCategory,
   Profile,
+  SavedResume,
 } from "../types";
 import type { DemoScenario } from "../data/demos";
 
@@ -42,6 +46,11 @@ export default function AppShell({
   const [bulletLabelOverrides, setBulletLabelOverrides] = useState<Record<string, string>>({});
   const [mobileTab, setMobileTab] = useState<"edit" | "preview">("edit");
   const [previewZoom, setPreviewZoom] = useState(0.7);
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const [saveLabel, setSaveLabel] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveConfirm, setSaveConfirm] = useState(false);
 
   const selectedBullets = allBullets
     .filter((b) => selectedIds.includes(b.id))
@@ -83,6 +92,7 @@ export default function AppShell({
   const handleAnalyze = async (jd: string, mode: "curate" | "optimize" = "curate") => {
     setIsAnalyzing(true);
     setError("");
+    setJobDescription(jd);
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -99,6 +109,7 @@ export default function AppShell({
       setReasoning(data.reasoning);
       setBulletTextOverrides(data.bulletTextOverrides || {});
       setBulletLabelOverrides(data.bulletLabelOverrides || {});
+      setKeywords(data.keywords || []);
       setHasAnalyzed(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -111,6 +122,7 @@ export default function AppShell({
     setSelectedIds([]);
     setCuratedSkills(getDefaultSkills(skillsBank));
     setReasoning("");
+    setKeywords([]);
     setHasAnalyzed(true);
   };
 
@@ -118,6 +130,7 @@ export default function AppShell({
     setSelectedIds(scenario.result.selectedBulletIds);
     setCuratedSkills(scenario.result.curatedSkills);
     setReasoning(scenario.result.reasoning);
+    setKeywords([]);
     setHasAnalyzed(true);
   };
 
@@ -163,6 +176,41 @@ export default function AppShell({
     setIsOverflowing(isOver);
   }, []);
 
+  const handleSaveResume = () => {
+    if (!saveLabel.trim()) return;
+    saveResume({
+      id: crypto.randomUUID(),
+      label: saveLabel.trim(),
+      savedAt: new Date().toISOString(),
+      jdSnippet: jobDescription.slice(0, 120),
+      selectedBulletIds: selectedIds,
+      curatedSkills,
+      bulletTextOverrides,
+      bulletLabelOverrides,
+      keywords,
+    });
+    setSaveLabel("");
+    setIsSaving(false);
+    setSaveConfirm(true);
+    setTimeout(() => setSaveConfirm(false), 2000);
+  };
+
+  const handleLoadResume = (entry: SavedResume) => {
+    setSelectedIds(entry.selectedBulletIds);
+    setCuratedSkills(entry.curatedSkills);
+    setBulletTextOverrides(entry.bulletTextOverrides);
+    setBulletLabelOverrides(entry.bulletLabelOverrides);
+    setKeywords(entry.keywords);
+    setJobDescription("");
+    setReasoning("");
+    setHasAnalyzed(true);
+  };
+
+  const handleDuplicateAndEdit = (entry: SavedResume) => {
+    const copy = duplicateResume(entry.id);
+    if (copy) handleLoadResume(copy);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
@@ -177,6 +225,14 @@ export default function AppShell({
             </span>
           )}
         </h1>
+        {hasAnalyzed && (
+          <button
+            onClick={() => setHasAnalyzed(false)}
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            Saved Resumes
+          </button>
+        )}
       </header>
 
       {error && (
@@ -239,6 +295,13 @@ export default function AppShell({
               </div>
             </div>
           )}
+
+          {!demoMode && (
+            <SavedResumes
+              onLoad={handleLoadResume}
+              onDuplicate={handleDuplicateAndEdit}
+            />
+          )}
         </div>
       ) : (
         <>
@@ -289,6 +352,14 @@ export default function AppShell({
                 </div>
               )}
 
+              {keywords.length > 0 && (
+                <KeywordGap
+                  keywords={keywords}
+                  selectedBullets={selectedBullets}
+                  curatedSkills={curatedSkills}
+                />
+              )}
+
               <div className="bg-white rounded-xl shadow-sm border p-4">
                 <h2 className="text-sm font-semibold mb-3 text-gray-700">
                   Experience Bullets
@@ -327,6 +398,40 @@ export default function AppShell({
                     fit on one page.
                   </p>
                 )}
+                {!isSaving ? (
+                  <button
+                    onClick={() => setIsSaving(true)}
+                    disabled={selectedIds.length === 0}
+                    className="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {saveConfirm ? "Saved!" : "Save Resume"}
+                  </button>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={saveLabel}
+                      onChange={(e) => setSaveLabel(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleSaveResume()}
+                      placeholder="Label, e.g. &quot;ML Engineer @ Acme&quot;"
+                      autoFocus
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={handleSaveResume}
+                      disabled={!saveLabel.trim()}
+                      className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => { setIsSaving(false); setSaveLabel(""); }}
+                      className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
                 <button
                   onClick={() => {
                     setHasAnalyzed(false);
@@ -335,6 +440,8 @@ export default function AppShell({
                     setReasoning("");
                     setBulletTextOverrides({});
                     setBulletLabelOverrides({});
+                    setKeywords([]);
+                    setJobDescription("");
                   }}
                   className="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
                 >
@@ -408,6 +515,14 @@ export default function AppShell({
                     </p>
                   )}
                 </div>
+              )}
+
+              {keywords.length > 0 && (
+                <KeywordGap
+                  keywords={keywords}
+                  selectedBullets={selectedBullets}
+                  curatedSkills={curatedSkills}
+                />
               )}
 
               <div className="bg-white rounded-xl shadow-sm border p-4">
@@ -488,6 +603,8 @@ export default function AppShell({
                   setReasoning("");
                   setBulletTextOverrides({});
                   setBulletLabelOverrides({});
+                  setKeywords([]);
+                  setJobDescription("");
                 }}
                 className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
               >
