@@ -63,6 +63,87 @@
     "charCount": 271
   },
   {
+    "id": "j8-state",
+    "company": "Joulea",
+    "category": ["Frontend"],
+    "label": "Centralized State Management Architecture",
+    "text": "Designed centralized frontend state management system using React Context API and useReducer hooks, establishing unidirectional data flow patterns across 20+ components; eliminated prop drilling, reduced component coupling, and created clear separation between UI state and server state for a multi-tenant B2B dashboard serving 200+ buildings.",
+    "priority": 2,
+    "charCount": 338
+  },
+  {
+    "id": "j9-k8s",
+    "company": "Joulea",
+    "category": ["DevOps", "Systems"],
+    "label": "Container Orchestration (EKS/Kubernetes)",
+    "text": "Deployed and managed containerized microservices on AWS EKS using Kubernetes; configured pod autoscaling, resource limits, and health probes to handle variable IoT data ingestion load; managed rolling deployments and service discovery across distributed backend services.",
+    "priority": 2,
+    "charCount": 267
+  },
+  {
+    "id": "j10-test",
+    "company": "Joulea",
+    "category": ["Backend", "Frontend", "Testing"],
+    "label": "Testing Strategy & Quality Architecture",
+    "text": "Established layered testing strategy across backend and frontend — unit tests for business logic, integration tests for API contracts, and end-to-end tests for critical user flows; made deliberate tradeoffs prioritizing integration test coverage over unit test volume given the data-intensive nature of IoT pipelines where real database behavior mattered more than mocked responses.",
+    "priority": 2,
+    "charCount": 366
+  },
+  {
+    "id": "j11-storage",
+    "company": "Joulea",
+    "category": ["Systems", "Data", "DevOps"],
+    "label": "Hot/Cold Data Storage & Cost Optimization",
+    "text": "Architected hot/cold storage pattern using RDS Aurora for 7-day active data and S3 for historical data, reducing infrastructure costs by 57%; built automated AWS Glue ETL pipelines for migration and Athena-backed APIs for historical analytics while maintaining sub-second query performance.",
+    "priority": 1,
+    "charCount": 280
+  },
+  {
+    "id": "j12-api",
+    "company": "Joulea",
+    "category": ["Backend", "API", "Data"],
+    "label": "API Design & Database Architecture",
+    "text": "Built 15+ RESTful APIs in Python/Flask and a GraphQL layer (Strawberry) that reduced API call volume by 60% via field-level optimization; implemented JWT + RBAC multi-tenant authentication, N+1 query prevention via DataLoader batching, connection pooling, and a fault detection service identifying HVAC anomalies from live sensor data. Designed 20+ table schema modeling complex many-to-many building/sensor/user relationships.",
+    "priority": 1,
+    "charCount": 421
+  },
+  {
+    "id": "j13-rate",
+    "company": "Joulea",
+    "category": ["Backend", "Systems"],
+    "label": "Rate Limiting & Observability",
+    "text": "Designed token bucket rate limiting system with Redis across user tiers and endpoint sensitivity levels; built CloudWatch metrics and alerting stack tracking pipeline health, API latency, and data quality; reduced API response times by 65% through Redis caching and CDN strategies.",
+    "priority": 2,
+    "charCount": 277
+  },
+  {
+    "id": "j14-fe",
+    "company": "Joulea",
+    "category": ["Frontend"],
+    "label": "Real-Time Frontend & Component Architecture",
+    "text": "Built 20+ reusable React/TypeScript/Material UI components reducing feature development time by 40%; implemented WebSocket integration for live sensor data updates with message batching and throttling to balance responsiveness with server load.",
+    "priority": 2,
+    "charCount": 244
+  },
+  {
+    "id": "j15-3d",
+    "company": "Joulea",
+    "category": ["Frontend", "Systems"],
+    "label": "3D Building Visualization System",
+    "text": "Developed Three.js-based 3D building visualization with interactive HVAC sensor overlays and intelligent render caching to prevent redundant renders during navigation, enabling intuitive spatial understanding of complex building systems for non-technical end users.",
+    "priority": 2,
+    "charCount": 263
+  },
+  {
+    "id": "j16-impact",
+    "company": "Joulea",
+    "category": ["Leadership", "Business"],
+    "label": "Customer Impact & Business Outcomes",
+    "text": "Platform serves 200+ commercial buildings; HVAC fault detection and AI-labeling pipeline directly contributed to 25% operational cost savings for customers; hot/cold storage redesign cut Joulea's own infrastructure costs by 57%.",
+    "priority": 2,
+    "charCount": 228
+  },
+  {
     "id": "tm1-fe",
     "company": "T-Mobile",
     "category": ["Frontend", "UI"],
@@ -88,6 +169,15 @@
     "text": "Designed REST and SOAP APIs integrating legacy billing systems with modern payment applications, implementing data transformation pipelines following enterprise architecture and PCI-compliant standards.",
     "priority": 1,
     "charCount": 199
+  },
+  {
+    "id": "tm5-infra",
+    "company": "T-Mobile",
+    "category": ["DevOps", "Systems"],
+    "label": "Cloud-Native Infrastructure & Messaging",
+    "text": "Deployed services via Docker and OpenShift with health checks, graceful shutdown, and rolling deployments for zero-downtime releases; integrated RabbitMQ for async payment processing with idempotent message handlers and dead letter queue retry logic; configured Apigee for rate limiting and traffic management across services.",
+    "priority": 1,
+    "charCount": 327
   },
   {
     "id": "tm4-docs",
