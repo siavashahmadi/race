@@ -147,15 +147,15 @@ export default function ResumePreview({
                   return (
                     <li
                       key={bullet.id}
-                      className="relative group"
+                      className="relative"
                       style={isOverridden ? { backgroundColor: "rgba(253, 224, 71, 0.15)" } : undefined}
                     >
                       {isOverridden && onBulletReset && (
                         <button
                           onClick={() => onBulletReset(bullet.id)}
-                          className="absolute -left-5 top-0 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-700 transition-opacity"
+                          className="absolute -left-8 top-0 w-5 h-5 pr-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
                           title="Reset to original"
-                          style={{ fontSize: "10pt" }}
+                          style={{ fontSize: "12px" }}
                         >
                           ↺
                         </button>
@@ -224,22 +224,28 @@ function EditableText({
   onCommit: (newText: string) => void;
 }) {
   const spanRef = useRef<HTMLSpanElement>(null);
-  const [focused, setFocused] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  useLayoutEffect(() => {
+    if (editing && spanRef.current) {
+      spanRef.current.focus();
+    }
+  }, [editing]);
 
   const handleBlur = () => {
-    setFocused(false);
     const el = spanRef.current;
-    if (!el) return;
+    if (!el) { setEditing(false); return; }
     const newText = el.textContent?.trim() || "";
     if (newText && newText !== text) {
       onCommit(newText);
     } else if (!newText) {
       el.textContent = text;
     }
+    setEditing(false);
   };
 
-  const handleFocus = () => {
-    setFocused(true);
+  const handleClick = () => {
+    if (!editing) setEditing(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -265,20 +271,20 @@ function EditableText({
   return (
     <span
       ref={spanRef}
-      contentEditable
+      contentEditable={editing}
       suppressContentEditableWarning
+      onClick={handleClick}
       onBlur={handleBlur}
-      onFocus={handleFocus}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
       style={{
         outline: "none",
-        cursor: "text",
+        cursor: editing ? "text" : "default",
         borderRadius: "2px",
         padding: "0 2px",
         margin: "0 -2px",
         transition: "background-color 0.15s",
-        backgroundColor: focused ? "#fef9c3" : undefined,
+        backgroundColor: editing ? "#fef9c3" : undefined,
       }}
     >
       {text}
