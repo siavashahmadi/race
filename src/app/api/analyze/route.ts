@@ -3,7 +3,8 @@ import { AnalyzeRequestSchema } from "../../../lib/schemas";
 import { analyzeJobDescription, optimizeForRole } from "../../../lib/claude";
 import experienceBank from "../../../data/experience_bank.json";
 import skillsBank from "../../../data/skills_bank.json";
-import type { Bullet, SkillBankCategory } from "../../../types";
+import projectsBank from "../../../data/projects_bank.json";
+import type { Bullet, Project, SkillBankCategory } from "../../../types";
 
 export async function POST(request: Request) {
   if (process.env.DEMO_MODE === "true") {
@@ -29,12 +30,14 @@ export async function POST(request: Request) {
         ? await optimizeForRole(
             parsed.data.jobDescription,
             experienceBank as Bullet[],
-            skillsBank as SkillBankCategory[]
+            skillsBank as SkillBankCategory[],
+            projectsBank as Project[]
           )
         : await analyzeJobDescription(
             parsed.data.jobDescription,
             experienceBank as Bullet[],
-            skillsBank as SkillBankCategory[]
+            skillsBank as SkillBankCategory[],
+            projectsBank as Project[]
           );
 
     return NextResponse.json(result);

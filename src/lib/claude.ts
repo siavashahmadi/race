@@ -1,14 +1,15 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { AnalyzeResponseSchema, OptimizeResponseSchema, RewriteBulletResponseSchema } from "./schemas";
 import { COMPANY_ORDER, getDefaultSkills } from "./resume-constants";
-import type { Bullet, SkillBankCategory, AnalyzeResponse, OptimizeResponse } from "../types";
+import type { Bullet, Project, SkillBankCategory, AnalyzeResponse, OptimizeResponse } from "../types";
 
 const client = new Anthropic();
 
 export async function analyzeJobDescription(
   jd: string,
   bullets: Bullet[],
-  skillsBank: SkillBankCategory[]
+  skillsBank: SkillBankCategory[],
+  projects: Project[] = []
 ): Promise<AnalyzeResponse> {
   const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
 
@@ -41,7 +42,22 @@ For skills curation:
 - Default to canonical category order unless JD strongly warrants reordering
 - If the JD mentions a technology, ensure it appears in the relevant category
 
+For projects selection:
+- Include 0-2 projects most relevant to the JD
+- Prefer projects demonstrating technologies or domains mentioned in the JD
+- Return empty array if no projects are sufficiently relevant
+- charCount is the description length — keep page-fit in mind
+
 Additionally, extract 10-25 important keywords from the job description: specific technologies, frameworks, methodologies, domain terms, and key qualifications. Exclude generic words like "team", "experience", "responsibilities". Use specific terms — e.g., "Golang" not "Go", "Kubernetes" not "K8s". Avoid keywords shorter than 3 characters.`;
+
+  const projectsMeta = projects.map((p) => ({
+    id: p.id,
+    name: p.name,
+    category: p.category,
+    technologies: p.technologies,
+    priority: p.priority,
+    charCount: p.charCount,
+  }));
 
   const userPrompt = `## Job Description
 ${jd}
@@ -49,10 +65,13 @@ ${jd}
 ## Available Bullets (metadata only — select by ID)
 ${JSON.stringify(bulletMeta, null, 2)}
 
+## Available Projects (select by ID)
+${JSON.stringify(projectsMeta, null, 2)}
+
 ## Skills Bank (select from these pools)
 ${JSON.stringify(skillsBank, null, 2)}
 
-Analyze the job description and select the most relevant bullets and skills. Use the "curate_resume" tool to return your selections.`;
+Analyze the job description and select the most relevant bullets, projects, and skills. Use the "curate_resume" tool to return your selections.`;
 
   const toolSchema = {
     name: "curate_resume" as const,
@@ -66,6 +85,12 @@ Analyze the job description and select the most relevant bullets and skills. Use
           items: { type: "string" as const },
           description:
             "Array of bullet IDs to include. Select the most relevant bullets that fit on one page.",
+        },
+        selectedProjectIds: {
+          type: "array" as const,
+          items: { type: "string" as const },
+          description:
+            "IDs of projects to include (0-2). Return empty array if none are relevant.",
         },
         curatedSkills: {
           type: "array" as const,
@@ -95,7 +120,7 @@ Analyze the job description and select the most relevant bullets and skills. Use
             "10-25 important keywords from the JD: specific technologies, frameworks, methodologies, domain terms, key qualifications. Exclude generic words.",
         },
       },
-      required: ["selectedBulletIds", "curatedSkills", "reasoning", "keywords"],
+      required: ["selectedBulletIds", "selectedProjectIds", "curatedSkills", "reasoning", "keywords"],
     },
   };
 
@@ -149,6 +174,7 @@ function fallbackSelection(
 
   return {
     selectedBulletIds: selectedIds,
+    selectedProjectIds: [],
     curatedSkills: getDefaultSkills(skillsBank),
     reasoning:
       "Fallback selection based on priority ranking (AI response contained invalid IDs).",
@@ -159,7 +185,8 @@ function fallbackSelection(
 export async function optimizeForRole(
   jd: string,
   bullets: Bullet[],
-  skillsBank: SkillBankCategory[]
+  skillsBank: SkillBankCategory[],
+  projects: Project[] = []
 ): Promise<OptimizeResponse> {
   const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
   const companyList = COMPANY_ORDER.join(", ");
@@ -187,7 +214,22 @@ For skills curation:
 - You MAY add skills mentioned in the JD that are not in the candidate's bank, if they are plausible adjacent skills the candidate could credibly claim based on their experience
 - If the JD mentions a specific framework/tool and the candidate has experience with a similar one, include the JD's version
 
+For projects selection:
+- Include 0-2 projects most relevant to the JD
+- Prefer projects demonstrating technologies or domains mentioned in the JD
+- Return empty array if no projects are sufficiently relevant
+- charCount is the description length — keep page-fit in mind
+
 Additionally, extract 10-25 important keywords from the job description: specific technologies, frameworks, methodologies, domain terms, and key qualifications. Exclude generic words like "team", "experience", "responsibilities". Use specific terms — e.g., "Golang" not "Go", "Kubernetes" not "K8s". Avoid keywords shorter than 3 characters.`;
+
+  const projectsMeta = projects.map((p) => ({
+    id: p.id,
+    name: p.name,
+    category: p.category,
+    technologies: p.technologies,
+    priority: p.priority,
+    charCount: p.charCount,
+  }));
 
   const userPrompt = `## Job Description
 ${jd}
@@ -195,10 +237,13 @@ ${jd}
 ## Available Bullets (select by ID, rewrite the text field to match the JD)
 ${JSON.stringify(bullets, null, 2)}
 
+## Available Projects (select by ID)
+${JSON.stringify(projectsMeta, null, 2)}
+
 ## Skills Bank (select from these, and add JD-mentioned skills if plausible)
 ${JSON.stringify(skillsBank, null, 2)}
 
-Analyze the JD, select the most relevant bullets, rewrite their text to align with the JD, and curate skills. Use the "optimize_resume" tool.`;
+Analyze the JD, select the most relevant bullets and projects, rewrite bullet text to align with the JD, and curate skills. Use the "optimize_resume" tool.`;
 
   const toolSchema = {
     name: "optimize_resume" as const,
@@ -211,6 +256,12 @@ Analyze the JD, select the most relevant bullets, rewrite their text to align wi
           type: "array" as const,
           items: { type: "string" as const },
           description: "Array of bullet IDs to include.",
+        },
+        selectedProjectIds: {
+          type: "array" as const,
+          items: { type: "string" as const },
+          description:
+            "IDs of projects to include (0-2). Return empty array if none are relevant.",
         },
         bulletTextOverrides: {
           type: "object" as const,
@@ -254,6 +305,7 @@ Analyze the JD, select the most relevant bullets, rewrite their text to align wi
       },
       required: [
         "selectedBulletIds",
+        "selectedProjectIds",
         "bulletTextOverrides",
         "curatedSkills",
         "reasoning",
