@@ -52,6 +52,7 @@ export default function AppShell({
   const [isSaving, setIsSaving] = useState(false);
   const [saveConfirm, setSaveConfirm] = useState(false);
   const [sectionOrder, setSectionOrder] = useState<string[]>(["Skills", "Experience", "Education"]);
+  const [rewritingBulletId, setRewritingBulletId] = useState<string | null>(null);
 
   const selectedBullets = allBullets
     .filter((b) => selectedIds.includes(b.id))
@@ -76,6 +77,32 @@ export default function AppShell({
       prev.map((c) => (c.category === category ? { ...c, items } : c))
     );
   }, []);
+
+  const handleBulletRewrite = useCallback(async (id: string) => {
+    const bullet = selectedBullets.find((b) => b.id === id);
+    if (!bullet || !jobDescription) return;
+    setRewritingBulletId(id);
+    try {
+      const res = await fetch("/api/rewrite-bullet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bulletId: id,
+          currentText: bullet.text,
+          currentLabel: bullet.label,
+          jobDescription,
+        }),
+      });
+      if (!res.ok) throw new Error("Rewrite failed");
+      const data = await res.json();
+      setBulletTextOverrides((prev) => ({ ...prev, [id]: data.text }));
+      if (data.label) setBulletLabelOverrides((prev) => ({ ...prev, [id]: data.label }));
+    } catch (err) {
+      console.error("Bullet rewrite failed:", err);
+    } finally {
+      setRewritingBulletId(null);
+    }
+  }, [selectedBullets, jobDescription]);
 
   const handleMoveSection = useCallback((index: number, direction: "up" | "down") => {
     setSectionOrder((prev) => {
@@ -527,6 +554,8 @@ export default function AppShell({
                     onBulletReset={handleBulletReset}
                     onSkillEdit={handleSkillEdit}
                     sectionOrder={sectionOrder}
+                    onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
+                    rewritingBulletId={rewritingBulletId}
                   />
                 </div>
               </div>
@@ -613,6 +642,8 @@ export default function AppShell({
                     onBulletReset={handleBulletReset}
                     onSkillEdit={handleSkillEdit}
                     sectionOrder={sectionOrder}
+                    onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
+                    rewritingBulletId={rewritingBulletId}
                   />
                 </div>
               </div>
