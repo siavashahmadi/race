@@ -56,11 +56,16 @@ export const OptimizeResponseSchema = AnalyzeResponseSchema.extend({
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
 });
 
+const sectionOrderField = z
+  .array(z.string())
+  .default(["Skills", "Experience", "Education"]);
+
 export const ExportRequestSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  sectionOrder: sectionOrderField,
 });
 
 export const ResumeStateSchema = z.object({
@@ -68,6 +73,7 @@ export const ResumeStateSchema = z.object({
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  sectionOrder: sectionOrderField,
 });
 
 export const SavedResumeSchema = z.object({
@@ -80,6 +86,7 @@ export const SavedResumeSchema = z.object({
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
   keywords: z.array(z.string()).default([]),
+  sectionOrder: sectionOrderField,
 });
 
 export const SavedResumeStoreSchema = z.object({

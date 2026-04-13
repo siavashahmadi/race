@@ -47,6 +47,7 @@ function PrintContent() {
         selectedBullets={selectedBullets}
         curatedSkills={state.curatedSkills}
         profile={profile as Profile}
+        sectionOrder={state.sectionOrder}
       />
     </div>
   );

@@ -15,6 +15,7 @@ interface ResumePreviewProps {
   onBulletLabelEdit?: (id: string, newLabel: string) => void;
   onBulletReset?: (id: string) => void;
   onSkillEdit?: (category: string, newItems: string) => void;
+  sectionOrder?: string[];
 }
 
 export default function ResumePreview({
@@ -28,6 +29,7 @@ export default function ResumePreview({
   onBulletLabelEdit,
   onBulletReset,
   onSkillEdit,
+  sectionOrder,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -48,6 +50,144 @@ export default function ResumePreview({
     {} as Record<string, Bullet[]>
   );
 
+  const order = sectionOrder ?? ["Skills", "Experience", "Education"];
+
+  const skillsSection = curatedSkills.length > 0 ? (
+    <section key="Skills" className="mb-6">
+      <h2 className="text-lg font-bold uppercase tracking-wide">Skills</h2>
+      <div
+        style={{
+          borderTop: "1px solid #000",
+          marginTop: "2px",
+          marginBottom: "8px",
+        }}
+      />
+      <div className="space-y-1" style={{ fontSize: "10pt" }}>
+        {curatedSkills.map((cat) => (
+          <p key={cat.category}>
+            <strong>{cat.category}:</strong>{" "}
+            {onSkillEdit ? (
+              <EditableText
+                text={cat.items.join(", ")}
+                onCommit={(newText) => onSkillEdit(cat.category, newText)}
+              />
+            ) : (
+              cat.items.join(", ")
+            )}
+          </p>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  const experienceSection = (
+    <section key="Experience" className="mb-6">
+      <h2 className="text-lg font-bold uppercase tracking-wide">
+        Professional Experience
+      </h2>
+      <div
+        style={{
+          borderTop: "1px solid #000",
+          marginTop: "2px",
+          marginBottom: "8px",
+        }}
+      />
+      {COMPANY_ORDER.map((company) => {
+        const bullets = bulletsByCompany[company];
+        if (!bullets || bullets.length === 0) return null;
+        const meta = COMPANY_META[company];
+        return (
+          <div key={company} className="mb-4">
+            <div className="flex justify-between items-baseline">
+              <h3 className="font-bold text-md">
+                {company} —{" "}
+                <span className="italic font-normal">{meta.role}</span>
+              </h3>
+              <span className="text-sm font-semibold">{meta.dates}</span>
+            </div>
+            <p className="text-xs text-gray-600 mb-1 italic">
+              {meta.location}
+            </p>
+            <ul
+              className="ml-4 list-disc space-y-1"
+              style={{ fontSize: "10pt" }}
+            >
+              {bullets.map((bullet) => {
+                const isTextOverridden = !!(bulletTextOverrides && bullet.id in bulletTextOverrides);
+                const isLabelOverridden = !!(bulletLabelOverrides && bullet.id in bulletLabelOverrides);
+                const isOverridden = isTextOverridden || isLabelOverridden;
+                const isEditable = !!onBulletEdit;
+                return (
+                  <li
+                    key={bullet.id}
+                    className="relative"
+                    style={isOverridden ? { backgroundColor: "rgba(253, 224, 71, 0.15)" } : undefined}
+                  >
+                    {isOverridden && onBulletReset && (
+                      <button
+                        onClick={() => onBulletReset(bullet.id)}
+                        className="absolute -left-8 top-0 w-5 h-5 pr-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        title="Reset to original"
+                        style={{ fontSize: "12px" }}
+                      >
+                        ↺
+                      </button>
+                    )}
+                    <strong>
+                      {isEditable && onBulletLabelEdit ? (
+                        <EditableText
+                          key={bullet.id + "-label-" + (isLabelOverridden ? "edited" : "original")}
+                          text={bullet.label}
+                          onCommit={(newLabel) => onBulletLabelEdit(bullet.id, newLabel)}
+                        />
+                      ) : (
+                        bullet.label
+                      )}
+                      :
+                    </strong>{" "}
+                    {isEditable ? (
+                      <EditableText
+                        key={bullet.id + "-text-" + (isTextOverridden ? "edited" : "original")}
+                        text={bullet.text}
+                        onCommit={(newText) => onBulletEdit(bullet.id, newText)}
+                      />
+                    ) : (
+                      bullet.text
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+    </section>
+  );
+
+  const educationSection = (
+    <section key="Education">
+      <h2 className="text-lg font-bold uppercase tracking-wide">
+        Education
+      </h2>
+      <div
+        style={{
+          borderTop: "1px solid #000",
+          marginTop: "2px",
+          marginBottom: "8px",
+        }}
+      />
+      <div className="flex justify-between items-baseline">
+        <p style={{ fontSize: "10pt" }}>
+          <strong>{profile.education.school}</strong>,{" "}
+          {profile.education.degree}
+        </p>
+        <span className="text-sm font-semibold">
+          {profile.education.graduationDate}
+        </span>
+      </div>
+    </section>
+  );
+
   return (
     <div
       ref={ref}
@@ -62,7 +202,7 @@ export default function ResumePreview({
         lineHeight: 1.2,
       }}
     >
-      {/* Header */}
+      {/* Header — always fixed at top */}
       <div className="flex justify-between items-end mb-4">
         <h1
           className="text-4xl tracking-tight"
@@ -78,140 +218,12 @@ export default function ResumePreview({
         </div>
       </div>
 
-      {/* Skills */}
-      {curatedSkills.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-lg font-bold uppercase tracking-wide">Skills</h2>
-          <div
-            style={{
-              borderTop: "1px solid #000",
-              marginTop: "2px",
-              marginBottom: "8px",
-            }}
-          />
-          <div className="space-y-1" style={{ fontSize: "10pt" }}>
-            {curatedSkills.map((cat) => (
-              <p key={cat.category}>
-                <strong>{cat.category}:</strong>{" "}
-                {onSkillEdit ? (
-                  <EditableText
-                    text={cat.items.join(", ")}
-                    onCommit={(newText) => onSkillEdit(cat.category, newText)}
-                  />
-                ) : (
-                  cat.items.join(", ")
-                )}
-              </p>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Experience */}
-      <section className="mb-6">
-        <h2 className="text-lg font-bold uppercase tracking-wide">
-          Professional Experience
-        </h2>
-        <div
-          style={{
-            borderTop: "1px solid #000",
-            marginTop: "2px",
-            marginBottom: "8px",
-          }}
-        />
-        {COMPANY_ORDER.map((company) => {
-          const bullets = bulletsByCompany[company];
-          if (!bullets || bullets.length === 0) return null;
-          const meta = COMPANY_META[company];
-          return (
-            <div key={company} className="mb-4">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-bold text-md">
-                  {company} —{" "}
-                  <span className="italic font-normal">{meta.role}</span>
-                </h3>
-                <span className="text-sm font-semibold">{meta.dates}</span>
-              </div>
-              <p className="text-xs text-gray-600 mb-1 italic">
-                {meta.location}
-              </p>
-              <ul
-                className="ml-4 list-disc space-y-1"
-                style={{ fontSize: "10pt" }}
-              >
-                {bullets.map((bullet) => {
-                  const isTextOverridden = !!(bulletTextOverrides && bullet.id in bulletTextOverrides);
-                  const isLabelOverridden = !!(bulletLabelOverrides && bullet.id in bulletLabelOverrides);
-                  const isOverridden = isTextOverridden || isLabelOverridden;
-                  const isEditable = !!onBulletEdit;
-                  return (
-                    <li
-                      key={bullet.id}
-                      className="relative"
-                      style={isOverridden ? { backgroundColor: "rgba(253, 224, 71, 0.15)" } : undefined}
-                    >
-                      {isOverridden && onBulletReset && (
-                        <button
-                          onClick={() => onBulletReset(bullet.id)}
-                          className="absolute -left-8 top-0 w-5 h-5 pr-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
-                          title="Reset to original"
-                          style={{ fontSize: "12px" }}
-                        >
-                          ↺
-                        </button>
-                      )}
-                      <strong>
-                        {isEditable && onBulletLabelEdit ? (
-                          <EditableText
-                            key={bullet.id + "-label-" + (isLabelOverridden ? "edited" : "original")}
-                            text={bullet.label}
-                            onCommit={(newLabel) => onBulletLabelEdit(bullet.id, newLabel)}
-                          />
-                        ) : (
-                          bullet.label
-                        )}
-                        :
-                      </strong>{" "}
-                      {isEditable ? (
-                        <EditableText
-                          key={bullet.id + "-text-" + (isTextOverridden ? "edited" : "original")}
-                          text={bullet.text}
-                          onCommit={(newText) => onBulletEdit(bullet.id, newText)}
-                        />
-                      ) : (
-                        bullet.text
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          );
-        })}
-      </section>
-
-      {/* Education */}
-      <section>
-        <h2 className="text-lg font-bold uppercase tracking-wide">
-          Education
-        </h2>
-        <div
-          style={{
-            borderTop: "1px solid #000",
-            marginTop: "2px",
-            marginBottom: "8px",
-          }}
-        />
-        <div className="flex justify-between items-baseline">
-          <p style={{ fontSize: "10pt" }}>
-            <strong>{profile.education.school}</strong>,{" "}
-            {profile.education.degree}
-          </p>
-          <span className="text-sm font-semibold">
-            {profile.education.graduationDate}
-          </span>
-        </div>
-      </section>
+      {order.map((section) => {
+        if (section === "Skills") return skillsSection;
+        if (section === "Experience") return experienceSection;
+        if (section === "Education") return educationSection;
+        return null;
+      })}
     </div>
   );
 }

@@ -19,6 +19,7 @@ export async function POST(request: Request) {
       curatedSkills: parsed.data.curatedSkills,
       bulletTextOverrides: parsed.data.bulletTextOverrides,
       bulletLabelOverrides: parsed.data.bulletLabelOverrides,
+      sectionOrder: parsed.data.sectionOrder,
     });
 
     return new Response(new Uint8Array(pdfBuffer), {

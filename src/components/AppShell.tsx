@@ -51,6 +51,7 @@ export default function AppShell({
   const [saveLabel, setSaveLabel] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveConfirm, setSaveConfirm] = useState(false);
+  const [sectionOrder, setSectionOrder] = useState<string[]>(["Skills", "Experience", "Education"]);
 
   const selectedBullets = allBullets
     .filter((b) => selectedIds.includes(b.id))
@@ -74,6 +75,15 @@ export default function AppShell({
     setCuratedSkills((prev) =>
       prev.map((c) => (c.category === category ? { ...c, items } : c))
     );
+  }, []);
+
+  const handleMoveSection = useCallback((index: number, direction: "up" | "down") => {
+    setSectionOrder((prev) => {
+      const next = [...prev];
+      const swap = direction === "up" ? index - 1 : index + 1;
+      [next[index], next[swap]] = [next[swap], next[index]];
+      return next;
+    });
   }, []);
 
   const handleBulletReset = useCallback((id: string) => {
@@ -152,6 +162,7 @@ export default function AppShell({
           curatedSkills,
           bulletTextOverrides,
           bulletLabelOverrides,
+          sectionOrder,
         }),
       });
       if (!res.ok) {
@@ -188,6 +199,7 @@ export default function AppShell({
       bulletTextOverrides,
       bulletLabelOverrides,
       keywords,
+      sectionOrder,
     });
     setSaveLabel("");
     setIsSaving(false);
@@ -201,6 +213,7 @@ export default function AppShell({
     setBulletTextOverrides(entry.bulletTextOverrides);
     setBulletLabelOverrides(entry.bulletLabelOverrides);
     setKeywords(entry.keywords);
+    setSectionOrder(entry.sectionOrder);
     setJobDescription("");
     setReasoning("");
     setHasAnalyzed(true);
@@ -442,11 +455,35 @@ export default function AppShell({
                     setBulletLabelOverrides({});
                     setKeywords([]);
                     setJobDescription("");
+                    setSectionOrder(["Skills", "Experience", "Education"]);
                   }}
                   className="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
                 >
                   Start Over
                 </button>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-4">
+                <h2 className="text-sm font-semibold mb-3 text-gray-700">Section Order</h2>
+                <div className="space-y-1">
+                  {sectionOrder.map((section, i) => (
+                    <div key={section} className="flex items-center justify-between py-1">
+                      <span className="text-sm text-gray-800">{section}</span>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => handleMoveSection(i, "up")}
+                          disabled={i === 0}
+                          className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-20 disabled:cursor-not-allowed"
+                        >↑</button>
+                        <button
+                          onClick={() => handleMoveSection(i, "down")}
+                          disabled={i === sectionOrder.length - 1}
+                          className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-20 disabled:cursor-not-allowed"
+                        >↓</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -489,6 +526,7 @@ export default function AppShell({
                     onBulletLabelEdit={handleBulletLabelEdit}
                     onBulletReset={handleBulletReset}
                     onSkillEdit={handleSkillEdit}
+                    sectionOrder={sectionOrder}
                   />
                 </div>
               </div>
@@ -574,6 +612,7 @@ export default function AppShell({
                     onBulletLabelEdit={handleBulletLabelEdit}
                     onBulletReset={handleBulletReset}
                     onSkillEdit={handleSkillEdit}
+                    sectionOrder={sectionOrder}
                   />
                 </div>
               </div>
@@ -605,6 +644,7 @@ export default function AppShell({
                   setBulletLabelOverrides({});
                   setKeywords([]);
                   setJobDescription("");
+                  setSectionOrder(["Skills", "Experience", "Education"]);
                 }}
                 className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
               >
