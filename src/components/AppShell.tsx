@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import JDInput from "./JDInput";
 import BulletToggle from "./BulletToggle";
+import ProjectToggle from "./ProjectToggle";
 import SkillsEditor from "./SkillsEditor";
 import ResumePreview from "./ResumePreview";
 import KeywordGap from "./KeywordGap";
@@ -11,6 +12,7 @@ import { getDefaultSkills } from "../lib/resume-constants";
 import { saveResume, duplicateResume } from "../lib/storage";
 import type {
   Bullet,
+  Project,
   SkillCategory,
   SkillBankCategory,
   Profile,
@@ -20,6 +22,7 @@ import type { DemoScenario } from "../data/demos";
 
 interface AppShellProps {
   allBullets: Bullet[];
+  allProjects: Project[];
   skillsBank: SkillBankCategory[];
   profile: Profile;
   demoMode?: boolean;
@@ -28,6 +31,7 @@ interface AppShellProps {
 
 export default function AppShell({
   allBullets,
+  allProjects,
   skillsBank,
   profile,
   demoMode = false,
@@ -51,8 +55,10 @@ export default function AppShell({
   const [saveLabel, setSaveLabel] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveConfirm, setSaveConfirm] = useState(false);
-  const [sectionOrder, setSectionOrder] = useState<string[]>(["Skills", "Experience", "Education"]);
+  const [sectionOrder, setSectionOrder] = useState<string[]>(["Skills", "Experience", "Projects", "Education"]);
   const [rewritingBulletId, setRewritingBulletId] = useState<string | null>(null);
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
+  const [projectTextOverrides, setProjectTextOverrides] = useState<Record<string, string>>({});
 
   const selectedBullets = allBullets
     .filter((b) => selectedIds.includes(b.id))
@@ -62,6 +68,14 @@ export default function AppShell({
       if (b.id in bulletLabelOverrides) result = { ...result, label: bulletLabelOverrides[b.id] };
       return result;
     });
+
+  const selectedProjects = allProjects
+    .filter((p) => selectedProjectIds.includes(p.id))
+    .map((p) =>
+      p.id in projectTextOverrides
+        ? { ...p, description: projectTextOverrides[p.id] }
+        : p
+    );
 
   const handleBulletTextEdit = useCallback((id: string, newText: string) => {
     setBulletTextOverrides((prev) => ({ ...prev, [id]: newText }));
@@ -77,6 +91,24 @@ export default function AppShell({
       prev.map((c) => (c.category === category ? { ...c, items } : c))
     );
   }, []);
+
+  const handleProjectDescEdit = useCallback((id: string, newText: string) => {
+    setProjectTextOverrides((prev) => ({ ...prev, [id]: newText }));
+  }, []);
+
+  const handleProjectReset = useCallback((id: string) => {
+    setProjectTextOverrides((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  }, []);
+
+  const handleToggleProject = (id: string) => {
+    setSelectedProjectIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
   const handleBulletRewrite = useCallback(async (id: string) => {
     const bullet = selectedBullets.find((b) => b.id === id);
@@ -142,10 +174,12 @@ export default function AppShell({
       }
       const data = await res.json();
       setSelectedIds(data.selectedBulletIds);
+      setSelectedProjectIds(data.selectedProjectIds || []);
       setCuratedSkills(data.curatedSkills);
       setReasoning(data.reasoning);
       setBulletTextOverrides(data.bulletTextOverrides || {});
       setBulletLabelOverrides(data.bulletLabelOverrides || {});
+      setProjectTextOverrides({});
       setKeywords(data.keywords || []);
       setHasAnalyzed(true);
     } catch (err) {
@@ -157,17 +191,21 @@ export default function AppShell({
 
   const handleManualMode = () => {
     setSelectedIds([]);
+    setSelectedProjectIds([]);
     setCuratedSkills(getDefaultSkills(skillsBank));
     setReasoning("");
     setKeywords([]);
+    setProjectTextOverrides({});
     setHasAnalyzed(true);
   };
 
   const handleDemoSelect = (scenario: DemoScenario) => {
     setSelectedIds(scenario.result.selectedBulletIds);
+    setSelectedProjectIds([]);
     setCuratedSkills(scenario.result.curatedSkills);
     setReasoning(scenario.result.reasoning);
     setKeywords([]);
+    setProjectTextOverrides({});
     setHasAnalyzed(true);
   };
 
@@ -186,9 +224,11 @@ export default function AppShell({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           selectedBulletIds: selectedIds,
+          selectedProjectIds,
           curatedSkills,
           bulletTextOverrides,
           bulletLabelOverrides,
+          projectTextOverrides,
           sectionOrder,
         }),
       });
@@ -222,9 +262,11 @@ export default function AppShell({
       savedAt: new Date().toISOString(),
       jdSnippet: jobDescription.slice(0, 120),
       selectedBulletIds: selectedIds,
+      selectedProjectIds,
       curatedSkills,
       bulletTextOverrides,
       bulletLabelOverrides,
+      projectTextOverrides,
       keywords,
       sectionOrder,
     });
@@ -236,9 +278,11 @@ export default function AppShell({
 
   const handleLoadResume = (entry: SavedResume) => {
     setSelectedIds(entry.selectedBulletIds);
+    setSelectedProjectIds(entry.selectedProjectIds);
     setCuratedSkills(entry.curatedSkills);
     setBulletTextOverrides(entry.bulletTextOverrides);
     setBulletLabelOverrides(entry.bulletLabelOverrides);
+    setProjectTextOverrides(entry.projectTextOverrides);
     setKeywords(entry.keywords);
     setSectionOrder(entry.sectionOrder);
     setJobDescription("");
@@ -424,6 +468,18 @@ export default function AppShell({
                 />
               </div>
 
+              <div className="bg-white rounded-xl shadow-sm border p-4">
+                <h2 className="text-sm font-semibold mb-3 text-gray-700">
+                  Projects
+                </h2>
+                <ProjectToggle
+                  allProjects={allProjects}
+                  selectedIds={selectedProjectIds}
+                  onToggle={handleToggleProject}
+                  projectTextOverrides={projectTextOverrides}
+                />
+              </div>
+
               <div className="bg-white rounded-xl shadow-sm border p-4 space-y-3">
                 <button
                   onClick={handleExport}
@@ -476,13 +532,15 @@ export default function AppShell({
                   onClick={() => {
                     setHasAnalyzed(false);
                     setSelectedIds([]);
+                    setSelectedProjectIds([]);
                     setCuratedSkills([]);
                     setReasoning("");
                     setBulletTextOverrides({});
                     setBulletLabelOverrides({});
+                    setProjectTextOverrides({});
                     setKeywords([]);
                     setJobDescription("");
-                    setSectionOrder(["Skills", "Experience", "Education"]);
+                    setSectionOrder(["Skills", "Experience", "Projects", "Education"]);
                   }}
                   className="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
                 >
@@ -556,6 +614,10 @@ export default function AppShell({
                     sectionOrder={sectionOrder}
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
+                    selectedProjects={selectedProjects}
+                    projectTextOverrides={projectTextOverrides}
+                    onProjectDescEdit={handleProjectDescEdit}
+                    onProjectReset={handleProjectReset}
                   />
                 </div>
               </div>
@@ -615,6 +677,18 @@ export default function AppShell({
                   onChange={setCuratedSkills}
                 />
               </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-4">
+                <h2 className="text-sm font-semibold mb-3 text-gray-700">
+                  Projects
+                </h2>
+                <ProjectToggle
+                  allProjects={allProjects}
+                  selectedIds={selectedProjectIds}
+                  onToggle={handleToggleProject}
+                  projectTextOverrides={projectTextOverrides}
+                />
+              </div>
             </div>
           )}
 
@@ -644,6 +718,10 @@ export default function AppShell({
                     sectionOrder={sectionOrder}
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
+                    selectedProjects={selectedProjects}
+                    projectTextOverrides={projectTextOverrides}
+                    onProjectDescEdit={handleProjectDescEdit}
+                    onProjectReset={handleProjectReset}
                   />
                 </div>
               </div>
@@ -669,13 +747,15 @@ export default function AppShell({
                 onClick={() => {
                   setHasAnalyzed(false);
                   setSelectedIds([]);
+                  setSelectedProjectIds([]);
                   setCuratedSkills([]);
                   setReasoning("");
                   setBulletTextOverrides({});
                   setBulletLabelOverrides({});
+                  setProjectTextOverrides({});
                   setKeywords([]);
                   setJobDescription("");
-                  setSectionOrder(["Skills", "Experience", "Education"]);
+                  setSectionOrder(["Skills", "Experience", "Projects", "Education"]);
                 }}
                 className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
               >
