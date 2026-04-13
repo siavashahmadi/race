@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { COMPANY_ORDER, COMPANY_META } from "../lib/resume-constants";
-import type { Bullet, SkillCategory, Profile } from "../types";
+import type { Bullet, Project, SkillCategory, Profile } from "../types";
 
 interface ResumePreviewProps {
   selectedBullets: Bullet[];
@@ -18,6 +18,10 @@ interface ResumePreviewProps {
   sectionOrder?: string[];
   onBulletRewrite?: (id: string) => void;
   rewritingBulletId?: string | null;
+  selectedProjects?: Project[];
+  projectTextOverrides?: Record<string, string>;
+  onProjectDescEdit?: (id: string, newText: string) => void;
+  onProjectReset?: (id: string) => void;
 }
 
 export default function ResumePreview({
@@ -34,6 +38,10 @@ export default function ResumePreview({
   sectionOrder,
   onBulletRewrite,
   rewritingBulletId,
+  selectedProjects,
+  projectTextOverrides,
+  onProjectDescEdit,
+  onProjectReset,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -182,6 +190,73 @@ export default function ResumePreview({
     </section>
   );
 
+  const projectsSection =
+    selectedProjects && selectedProjects.length > 0 ? (
+      <section key="Projects" className="mb-6">
+        <h2 className="text-lg font-bold uppercase tracking-wide">Projects</h2>
+        <div
+          style={{
+            borderTop: "1px solid #000",
+            marginTop: "2px",
+            marginBottom: "8px",
+          }}
+        />
+        <div className="space-y-2" style={{ fontSize: "10pt" }}>
+          {selectedProjects.map((project) => {
+            const isOverridden = !!(
+              projectTextOverrides && project.id in projectTextOverrides
+            );
+            return (
+              <div
+                key={project.id}
+                className="relative group"
+                style={
+                  isOverridden
+                    ? { backgroundColor: "rgba(253, 224, 71, 0.15)" }
+                    : undefined
+                }
+              >
+                {isOverridden && onProjectReset && (
+                  <button
+                    onClick={() => onProjectReset(project.id)}
+                    className="absolute -left-8 top-0 w-5 h-5 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                    title="Reset to original"
+                    style={{ fontSize: "12px" }}
+                  >
+                    ↺
+                  </button>
+                )}
+                <div className="flex justify-between items-baseline">
+                  <span className="font-bold">{project.name}</span>
+                  {project.url && (
+                    <a
+                      href={project.url}
+                      className="text-blue-600 text-xs underline"
+                    >
+                      {project.url}
+                    </a>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mb-0.5">
+                  {project.technologies.join(", ")}
+                </p>
+                <p>
+                  {onProjectDescEdit ? (
+                    <EditableText
+                      text={project.description}
+                      onCommit={(t) => onProjectDescEdit(project.id, t)}
+                    />
+                  ) : (
+                    project.description
+                  )}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    ) : null;
+
   const educationSection = (
     <section key="Education">
       <h2 className="text-lg font-bold uppercase tracking-wide">
@@ -239,6 +314,7 @@ export default function ResumePreview({
       {order.map((section) => {
         if (section === "Skills") return skillsSection;
         if (section === "Experience") return experienceSection;
+        if (section === "Projects") return projectsSection;
         if (section === "Education") return educationSection;
         return null;
       })}

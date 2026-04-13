@@ -5,8 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import ResumePreview from "../../components/ResumePreview";
 import experienceBank from "../../data/experience_bank.json";
+import projectsBank from "../../data/projects_bank.json";
 import profile from "../../data/profile.json";
-import type { Bullet, SkillCategory, Profile, ResumeState } from "../../types";
+import type { Bullet, Project, SkillCategory, Profile, ResumeState } from "../../types";
 
 function PrintContent() {
   const searchParams = useSearchParams();
@@ -41,6 +42,15 @@ function PrintContent() {
       return result;
     });
 
+  const allProjects = projectsBank as Project[];
+  const selectedProjects = allProjects
+    .filter((p) => (state.selectedProjectIds ?? []).includes(p.id))
+    .map((p) =>
+      state.projectTextOverrides && p.id in state.projectTextOverrides
+        ? { ...p, description: state.projectTextOverrides[p.id] }
+        : p
+    );
+
   return (
     <div style={{ width: "816px", margin: "0 auto", transform: "none" }}>
       <ResumePreview
@@ -48,6 +58,8 @@ function PrintContent() {
         curatedSkills={state.curatedSkills}
         profile={profile as Profile}
         sectionOrder={state.sectionOrder}
+        selectedProjects={selectedProjects}
+        projectTextOverrides={state.projectTextOverrides}
       />
     </div>
   );
