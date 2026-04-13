@@ -93,3 +93,15 @@ export const SavedResumeStoreSchema = z.object({
   version: z.literal(1),
   entries: z.array(SavedResumeSchema),
 });
+
+export const RewriteBulletRequestSchema = z.object({
+  bulletId: z.string(),
+  currentText: z.string(),
+  currentLabel: z.string(),
+  jobDescription: z.string(),
+});
+
+export const RewriteBulletResponseSchema = z.object({
+  text: z.string(),
+  label: z.string().optional(),
+});

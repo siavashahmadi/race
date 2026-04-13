@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { AnalyzeResponseSchema, OptimizeResponseSchema } from "./schemas";
+import { AnalyzeResponseSchema, OptimizeResponseSchema, RewriteBulletResponseSchema } from "./schemas";
 import { COMPANY_ORDER, getDefaultSkills } from "./resume-constants";
 import type { Bullet, SkillBankCategory, AnalyzeResponse, OptimizeResponse } from "../types";
 
@@ -311,4 +311,69 @@ Analyze the JD, select the most relevant bullets, rewrite their text to align wi
     bulletTextOverrides: cleanTextOverrides,
     bulletLabelOverrides: cleanLabelOverrides,
   };
+}
+
+export async function rewriteBullet(
+  _bulletId: string,
+  currentText: string,
+  currentLabel: string,
+  jd: string
+): Promise<{ text: string; label?: string }> {
+  const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
+
+  const systemPrompt = `You are a resume editor. Rewrite a single bullet point to be tighter and more aligned with a job description.
+
+Rules:
+- Preserve factual accuracy — never fabricate metrics, tools, or outcomes
+- Stay within ~20% of the original character count (shorter is fine, longer is not)
+- Mirror the JD's terminology where the candidate's experience supports it
+- Do not change the label unless it meaningfully improves JD alignment`;
+
+  const userPrompt = `## Job Description
+${jd}
+
+## Current Bullet
+Label: ${currentLabel}
+Text: ${currentText}
+Character count: ${currentText.length}
+
+Rewrite this bullet to better match the JD. Use the rewrite_bullet tool.`;
+
+  const toolSchema = {
+    name: "rewrite_bullet" as const,
+    description: "Return the rewritten bullet text and optionally a new label",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        text: {
+          type: "string" as const,
+          description:
+            "Rewritten bullet text. Must stay within ~20% of original character count.",
+        },
+        label: {
+          type: "string" as const,
+          description:
+            "Rewritten label — only include if it should change to better match the JD.",
+        },
+      },
+      required: ["text"],
+    },
+  };
+
+  const response = await client.messages.create({
+    model,
+    max_tokens: 512,
+    temperature: 0.4,
+    system: systemPrompt,
+    messages: [{ role: "user", content: userPrompt }],
+    tools: [toolSchema],
+    tool_choice: { type: "tool", name: "rewrite_bullet" },
+  });
+
+  const toolUse = response.content.find((b) => b.type === "tool_use");
+  if (!toolUse || toolUse.type !== "tool_use") {
+    throw new Error("Claude did not return a tool_use response");
+  }
+
+  return RewriteBulletResponseSchema.parse(toolUse.input);
 }
