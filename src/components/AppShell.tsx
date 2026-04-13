@@ -17,6 +17,8 @@ import type {
   SkillBankCategory,
   Profile,
   SavedResume,
+  CompanyMetaOverride,
+  ProjectOverride,
 } from "../types";
 import type { DemoScenario } from "../data/demos";
 
@@ -58,7 +60,8 @@ export default function AppShell({
   const [sectionOrder, setSectionOrder] = useState<string[]>(["Skills", "Experience", "Projects", "Education"]);
   const [rewritingBulletId, setRewritingBulletId] = useState<string | null>(null);
   const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
-  const [projectTextOverrides, setProjectTextOverrides] = useState<Record<string, string>>({});
+  const [companyMetaOverrides, setCompanyMetaOverrides] = useState<Record<string, CompanyMetaOverride>>({});
+  const [projectOverrides, setProjectOverrides] = useState<Record<string, ProjectOverride>>({});
 
   const selectedBullets = allBullets
     .filter((b) => selectedIds.includes(b.id))
@@ -71,11 +74,16 @@ export default function AppShell({
 
   const selectedProjects = allProjects
     .filter((p) => selectedProjectIds.includes(p.id))
-    .map((p) =>
-      p.id in projectTextOverrides
-        ? { ...p, description: projectTextOverrides[p.id] }
-        : p
-    );
+    .map((p) => {
+      const ov = projectOverrides[p.id];
+      if (!ov) return p;
+      return {
+        ...p,
+        ...(ov.name && { name: ov.name }),
+        ...(ov.technologies && { technologies: ov.technologies.split(",").map((t) => t.trim()).filter(Boolean) }),
+        ...(ov.description && { description: ov.description }),
+      };
+    });
 
   const handleBulletTextEdit = useCallback((id: string, newText: string) => {
     setBulletTextOverrides((prev) => ({ ...prev, [id]: newText }));
@@ -92,12 +100,22 @@ export default function AppShell({
     );
   }, []);
 
-  const handleProjectDescEdit = useCallback((id: string, newText: string) => {
-    setProjectTextOverrides((prev) => ({ ...prev, [id]: newText }));
+  const handleCompanyMetaEdit = useCallback((company: string, field: keyof CompanyMetaOverride, value: string) => {
+    setCompanyMetaOverrides((prev) => ({
+      ...prev,
+      [company]: { ...prev[company], [field]: value },
+    }));
+  }, []);
+
+  const handleProjectEdit = useCallback((id: string, field: keyof ProjectOverride, value: string) => {
+    setProjectOverrides((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], [field]: value },
+    }));
   }, []);
 
   const handleProjectReset = useCallback((id: string) => {
-    setProjectTextOverrides((prev) => {
+    setProjectOverrides((prev) => {
       const next = { ...prev };
       delete next[id];
       return next;
@@ -179,7 +197,8 @@ export default function AppShell({
       setReasoning(data.reasoning);
       setBulletTextOverrides(data.bulletTextOverrides || {});
       setBulletLabelOverrides(data.bulletLabelOverrides || {});
-      setProjectTextOverrides({});
+      setCompanyMetaOverrides({});
+      setProjectOverrides({});
       setKeywords(data.keywords || []);
       setHasAnalyzed(true);
     } catch (err) {
@@ -195,7 +214,8 @@ export default function AppShell({
     setCuratedSkills(getDefaultSkills(skillsBank));
     setReasoning("");
     setKeywords([]);
-    setProjectTextOverrides({});
+    setCompanyMetaOverrides({});
+    setProjectOverrides({});
     setHasAnalyzed(true);
   };
 
@@ -205,7 +225,8 @@ export default function AppShell({
     setCuratedSkills(scenario.result.curatedSkills);
     setReasoning(scenario.result.reasoning);
     setKeywords([]);
-    setProjectTextOverrides({});
+    setCompanyMetaOverrides({});
+    setProjectOverrides({});
     setHasAnalyzed(true);
   };
 
@@ -228,7 +249,8 @@ export default function AppShell({
           curatedSkills,
           bulletTextOverrides,
           bulletLabelOverrides,
-          projectTextOverrides,
+          companyMetaOverrides,
+          projectOverrides,
           sectionOrder,
         }),
       });
@@ -266,7 +288,8 @@ export default function AppShell({
       curatedSkills,
       bulletTextOverrides,
       bulletLabelOverrides,
-      projectTextOverrides,
+      companyMetaOverrides,
+      projectOverrides,
       keywords,
       sectionOrder,
     });
@@ -282,7 +305,8 @@ export default function AppShell({
     setCuratedSkills(entry.curatedSkills);
     setBulletTextOverrides(entry.bulletTextOverrides);
     setBulletLabelOverrides(entry.bulletLabelOverrides);
-    setProjectTextOverrides(entry.projectTextOverrides);
+    setCompanyMetaOverrides(entry.companyMetaOverrides);
+    setProjectOverrides(entry.projectOverrides);
     setKeywords(entry.keywords);
     setSectionOrder(entry.sectionOrder);
     setJobDescription("");
@@ -476,7 +500,7 @@ export default function AppShell({
                   allProjects={allProjects}
                   selectedIds={selectedProjectIds}
                   onToggle={handleToggleProject}
-                  projectTextOverrides={projectTextOverrides}
+                  projectOverrides={projectOverrides}
                 />
               </div>
 
@@ -537,7 +561,8 @@ export default function AppShell({
                     setReasoning("");
                     setBulletTextOverrides({});
                     setBulletLabelOverrides({});
-                    setProjectTextOverrides({});
+                    setCompanyMetaOverrides({});
+                    setProjectOverrides({});
                     setKeywords([]);
                     setJobDescription("");
                     setSectionOrder(["Skills", "Experience", "Projects", "Education"]);
@@ -615,9 +640,11 @@ export default function AppShell({
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
                     selectedProjects={selectedProjects}
-                    projectTextOverrides={projectTextOverrides}
-                    onProjectDescEdit={handleProjectDescEdit}
+                    projectOverrides={projectOverrides}
+                    onProjectEdit={handleProjectEdit}
                     onProjectReset={handleProjectReset}
+                    companyMetaOverrides={companyMetaOverrides}
+                    onCompanyMetaEdit={handleCompanyMetaEdit}
                   />
                 </div>
               </div>
@@ -686,7 +713,7 @@ export default function AppShell({
                   allProjects={allProjects}
                   selectedIds={selectedProjectIds}
                   onToggle={handleToggleProject}
-                  projectTextOverrides={projectTextOverrides}
+                  projectOverrides={projectOverrides}
                 />
               </div>
             </div>
@@ -719,9 +746,11 @@ export default function AppShell({
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
                     selectedProjects={selectedProjects}
-                    projectTextOverrides={projectTextOverrides}
-                    onProjectDescEdit={handleProjectDescEdit}
+                    projectOverrides={projectOverrides}
+                    onProjectEdit={handleProjectEdit}
                     onProjectReset={handleProjectReset}
+                    companyMetaOverrides={companyMetaOverrides}
+                    onCompanyMetaEdit={handleCompanyMetaEdit}
                   />
                 </div>
               </div>
@@ -752,7 +781,8 @@ export default function AppShell({
                   setReasoning("");
                   setBulletTextOverrides({});
                   setBulletLabelOverrides({});
-                  setProjectTextOverrides({});
+                  setCompanyMetaOverrides({});
+                  setProjectOverrides({});
                   setKeywords([]);
                   setJobDescription("");
                   setSectionOrder(["Skills", "Experience", "Projects", "Education"]);

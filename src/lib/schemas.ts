@@ -72,13 +72,27 @@ const sectionOrderField = z
   .array(z.string())
   .default(["Skills", "Experience", "Projects", "Education"]);
 
+export const CompanyMetaOverrideSchema = z.object({
+  name: z.string().optional(),
+  role: z.string().optional(),
+  location: z.string().optional(),
+  dates: z.string().optional(),
+});
+
+export const ProjectOverrideSchema = z.object({
+  name: z.string().optional(),
+  technologies: z.string().optional(),
+  description: z.string().optional(),
+});
+
 export const ExportRequestSchema = z.object({
   selectedBulletIds: z.array(z.string()),
   selectedProjectIds: z.array(z.string()).default([]),
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
-  projectTextOverrides: z.record(z.string(), z.string()).default({}),
+  companyMetaOverrides: z.record(z.string(), CompanyMetaOverrideSchema).default({}),
+  projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   sectionOrder: sectionOrderField,
 });
 
@@ -88,7 +102,8 @@ export const ResumeStateSchema = z.object({
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
-  projectTextOverrides: z.record(z.string(), z.string()).default({}),
+  companyMetaOverrides: z.record(z.string(), CompanyMetaOverrideSchema).default({}),
+  projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   sectionOrder: sectionOrderField,
 });
 
@@ -102,7 +117,8 @@ export const SavedResumeSchema = z.object({
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
-  projectTextOverrides: z.record(z.string(), z.string()).default({}),
+  companyMetaOverrides: z.record(z.string(), CompanyMetaOverrideSchema).default({}),
+  projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   keywords: z.array(z.string()).default([]),
   sectionOrder: sectionOrderField,
 });

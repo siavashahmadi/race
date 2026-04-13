@@ -1,19 +1,19 @@
 "use client";
 
-import type { Project } from "../types";
+import type { Project, ProjectOverride } from "../types";
 
 interface ProjectToggleProps {
   allProjects: Project[];
   selectedIds: string[];
   onToggle: (id: string) => void;
-  projectTextOverrides?: Record<string, string>;
+  projectOverrides?: Record<string, ProjectOverride>;
 }
 
 export default function ProjectToggle({
   allProjects,
   selectedIds,
   onToggle,
-  projectTextOverrides,
+  projectOverrides,
 }: ProjectToggleProps) {
   const sorted = [...allProjects].sort((a, b) => a.priority - b.priority);
 
@@ -25,8 +25,8 @@ export default function ProjectToggle({
     <div className="space-y-2">
       {sorted.map((project) => {
         const isSelected = selectedIds.includes(project.id);
-        const isOverridden = !!(projectTextOverrides && project.id in projectTextOverrides);
-        const description = projectTextOverrides?.[project.id] ?? project.description;
+        const isOverridden = !!projectOverrides?.[project.id];
+        const description = projectOverrides?.[project.id]?.description ?? project.description;
 
         return (
           <button

@@ -43,13 +43,9 @@ function PrintContent() {
     });
 
   const allProjects = projectsBank as Project[];
-  const selectedProjects = allProjects
-    .filter((p) => (state.selectedProjectIds ?? []).includes(p.id))
-    .map((p) =>
-      state.projectTextOverrides && p.id in state.projectTextOverrides
-        ? { ...p, description: state.projectTextOverrides[p.id] }
-        : p
-    );
+  const selectedProjects = allProjects.filter((p) =>
+    (state.selectedProjectIds ?? []).includes(p.id)
+  );
 
   return (
     <div style={{ width: "816px", margin: "0 auto", transform: "none" }}>
@@ -59,7 +55,8 @@ function PrintContent() {
         profile={profile as Profile}
         sectionOrder={state.sectionOrder}
         selectedProjects={selectedProjects}
-        projectTextOverrides={state.projectTextOverrides}
+        projectOverrides={state.projectOverrides}
+        companyMetaOverrides={state.companyMetaOverrides}
       />
     </div>
   );

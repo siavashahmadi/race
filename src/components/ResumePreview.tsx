@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { COMPANY_ORDER, COMPANY_META } from "../lib/resume-constants";
-import type { Bullet, Project, SkillCategory, Profile } from "../types";
+import type { Bullet, Project, SkillCategory, Profile, CompanyMetaOverride, ProjectOverride } from "../types";
 
 interface ResumePreviewProps {
   selectedBullets: Bullet[];
@@ -19,9 +19,11 @@ interface ResumePreviewProps {
   onBulletRewrite?: (id: string) => void;
   rewritingBulletId?: string | null;
   selectedProjects?: Project[];
-  projectTextOverrides?: Record<string, string>;
-  onProjectDescEdit?: (id: string, newText: string) => void;
+  projectOverrides?: Record<string, ProjectOverride>;
+  onProjectEdit?: (id: string, field: keyof ProjectOverride, value: string) => void;
   onProjectReset?: (id: string) => void;
+  companyMetaOverrides?: Record<string, CompanyMetaOverride>;
+  onCompanyMetaEdit?: (company: string, field: keyof CompanyMetaOverride, value: string) => void;
 }
 
 export default function ResumePreview({
@@ -39,9 +41,11 @@ export default function ResumePreview({
   onBulletRewrite,
   rewritingBulletId,
   selectedProjects,
-  projectTextOverrides,
-  onProjectDescEdit,
+  projectOverrides,
+  onProjectEdit,
   onProjectReset,
+  companyMetaOverrides,
+  onCompanyMetaEdit,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -108,17 +112,42 @@ export default function ResumePreview({
         const bullets = bulletsByCompany[company];
         if (!bullets || bullets.length === 0) return null;
         const meta = COMPANY_META[company];
+        const compOv = companyMetaOverrides?.[company];
         return (
           <div key={company} className="mb-4">
             <div className="flex justify-between items-baseline">
               <h3 className="font-bold text-md">
-                {company} —{" "}
-                <span className="italic font-normal">{meta.role}</span>
+                {onCompanyMetaEdit ? (
+                  <EditableText
+                    text={compOv?.name ?? company}
+                    onCommit={(v) => onCompanyMetaEdit(company, "name", v)}
+                  />
+                ) : (compOv?.name ?? company)}{" "}—{" "}
+                <span className="italic font-normal">
+                  {onCompanyMetaEdit ? (
+                    <EditableText
+                      text={compOv?.role ?? meta.role}
+                      onCommit={(v) => onCompanyMetaEdit(company, "role", v)}
+                    />
+                  ) : (compOv?.role ?? meta.role)}
+                </span>
               </h3>
-              <span className="text-sm font-semibold">{meta.dates}</span>
+              <span className="text-sm font-semibold">
+                {onCompanyMetaEdit ? (
+                  <EditableText
+                    text={compOv?.dates ?? meta.dates}
+                    onCommit={(v) => onCompanyMetaEdit(company, "dates", v)}
+                  />
+                ) : (compOv?.dates ?? meta.dates)}
+              </span>
             </div>
             <p className="text-xs text-gray-600 mb-1 italic">
-              {meta.location}
+              {onCompanyMetaEdit ? (
+                <EditableText
+                  text={compOv?.location ?? meta.location}
+                  onCommit={(v) => onCompanyMetaEdit(company, "location", v)}
+                />
+              ) : (compOv?.location ?? meta.location)}
             </p>
             <ul
               className="ml-4 list-disc space-y-1"
@@ -203,9 +232,8 @@ export default function ResumePreview({
         />
         <div className="space-y-2" style={{ fontSize: "10pt" }}>
           {selectedProjects.map((project) => {
-            const isOverridden = !!(
-              projectTextOverrides && project.id in projectTextOverrides
-            );
+            const projOv = projectOverrides?.[project.id];
+            const isOverridden = !!projOv;
             return (
               <div
                 key={project.id}
@@ -227,7 +255,14 @@ export default function ResumePreview({
                   </button>
                 )}
                 <div className="flex justify-between items-baseline">
-                  <span className="font-bold">{project.name}</span>
+                  <span className="font-bold">
+                    {onProjectEdit ? (
+                      <EditableText
+                        text={projOv?.name ?? project.name}
+                        onCommit={(v) => onProjectEdit(project.id, "name", v)}
+                      />
+                    ) : (projOv?.name ?? project.name)}
+                  </span>
                   {project.url && (
                     <a
                       href={project.url}
@@ -238,18 +273,23 @@ export default function ResumePreview({
                   )}
                 </div>
                 <p className="text-xs text-gray-500 mb-0.5">
-                  {project.technologies.join(", ")}
-                </p>
-                <p>
-                  {onProjectDescEdit ? (
+                  {onProjectEdit ? (
                     <EditableText
-                      text={project.description}
-                      onCommit={(t) => onProjectDescEdit(project.id, t)}
+                      text={projOv?.technologies ?? project.technologies.join(", ")}
+                      onCommit={(v) => onProjectEdit(project.id, "technologies", v)}
                     />
-                  ) : (
-                    project.description
-                  )}
+                  ) : (projOv?.technologies ?? project.technologies.join(", "))}
                 </p>
+                <ul className="ml-4 list-disc">
+                  <li>
+                    {onProjectEdit ? (
+                      <EditableText
+                        text={projOv?.description ?? project.description}
+                        onCommit={(v) => onProjectEdit(project.id, "description", v)}
+                      />
+                    ) : (projOv?.description ?? project.description)}
+                  </li>
+                </ul>
               </div>
             );
           })}

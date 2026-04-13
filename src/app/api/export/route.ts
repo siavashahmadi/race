@@ -20,7 +20,8 @@ export async function POST(request: Request) {
       curatedSkills: parsed.data.curatedSkills,
       bulletTextOverrides: parsed.data.bulletTextOverrides,
       bulletLabelOverrides: parsed.data.bulletLabelOverrides,
-      projectTextOverrides: parsed.data.projectTextOverrides,
+      companyMetaOverrides: parsed.data.companyMetaOverrides,
+      projectOverrides: parsed.data.projectOverrides,
       sectionOrder: parsed.data.sectionOrder,
     });
 
