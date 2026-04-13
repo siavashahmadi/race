@@ -1,6 +1,17 @@
 import { z } from "zod";
 import companiesData from "../data/companies.json";
 
+export const ProjectSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  technologies: z.array(z.string()),
+  url: z.string().optional(),
+  category: z.array(z.string()),
+  priority: z.number().min(1).max(3),
+  charCount: z.number(),
+});
+
 const companyNames = companiesData.map((c) => c.name) as [string, ...string[]];
 export const CompanyEnum = z.enum(companyNames);
 
@@ -46,6 +57,7 @@ export const AnalyzeRequestSchema = z.object({
 
 export const AnalyzeResponseSchema = z.object({
   selectedBulletIds: z.array(z.string()),
+  selectedProjectIds: z.array(z.string()).default([]),
   curatedSkills: z.array(SkillCategorySchema),
   reasoning: z.string(),
   keywords: z.array(z.string()).default([]),
@@ -58,21 +70,25 @@ export const OptimizeResponseSchema = AnalyzeResponseSchema.extend({
 
 const sectionOrderField = z
   .array(z.string())
-  .default(["Skills", "Experience", "Education"]);
+  .default(["Skills", "Experience", "Projects", "Education"]);
 
 export const ExportRequestSchema = z.object({
   selectedBulletIds: z.array(z.string()),
+  selectedProjectIds: z.array(z.string()).default([]),
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  projectTextOverrides: z.record(z.string(), z.string()).default({}),
   sectionOrder: sectionOrderField,
 });
 
 export const ResumeStateSchema = z.object({
   selectedBulletIds: z.array(z.string()),
+  selectedProjectIds: z.array(z.string()).default([]),
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  projectTextOverrides: z.record(z.string(), z.string()).default({}),
   sectionOrder: sectionOrderField,
 });
 
@@ -82,9 +98,11 @@ export const SavedResumeSchema = z.object({
   savedAt: z.string(),
   jdSnippet: z.string().default(""),
   selectedBulletIds: z.array(z.string()),
+  selectedProjectIds: z.array(z.string()).default([]),
   curatedSkills: z.array(SkillCategorySchema),
   bulletTextOverrides: z.record(z.string(), z.string()).default({}),
   bulletLabelOverrides: z.record(z.string(), z.string()).default({}),
+  projectTextOverrides: z.record(z.string(), z.string()).default({}),
   keywords: z.array(z.string()).default([]),
   sectionOrder: sectionOrderField,
 });

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "p1",
+    "name": "RACE — Resume-as-Code Engine",
+    "description": "Resume tailoring tool using Claude to curate bullets and skills from a personal bank for specific job descriptions; features inline editing, per-bullet rewrite, section reordering, and Puppeteer-based PDF export.",
+    "technologies": ["Next.js", "TypeScript", "Claude API", "Puppeteer", "Docker"],
+    "url": "",
+    "category": ["full-stack", "ai", "tooling", "developer-tools"],
+    "priority": 1,
+    "charCount": 211
+  }
+]

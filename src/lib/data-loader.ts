@@ -1,11 +1,12 @@
 import { readFile } from "fs/promises";
 import { join } from "path";
-import type { Bullet, SkillBankCategory, Profile } from "../types";
+import type { Bullet, Project, SkillBankCategory, Profile } from "../types";
 
 import baseProfile from "../data/profile.json";
 import baseExperienceBank from "../data/experience_bank.json";
 import baseSkillsBank from "../data/skills_bank.json";
 import baseCompanies from "../data/companies.json";
+import baseProjectsBank from "../data/projects_bank.json";
 
 const OVERRIDES_DIR = join(process.cwd(), "src/data/overrides");
 
@@ -40,12 +41,21 @@ export async function loadCompanies() {
   );
 }
 
+export async function loadProjectsBank(): Promise<Project[]> {
+  return loadWithOverride<Project[]>(
+    "projects_bank.json",
+    baseProjectsBank as Project[]
+  );
+}
+
 export async function loadAllData() {
-  const [profile, experienceBank, skillsBank, companies] = await Promise.all([
-    loadProfile(),
-    loadExperienceBank(),
-    loadSkillsBank(),
-    loadCompanies(),
-  ]);
-  return { profile, experienceBank, skillsBank, companies };
+  const [profile, experienceBank, skillsBank, companies, projectsBank] =
+    await Promise.all([
+      loadProfile(),
+      loadExperienceBank(),
+      loadSkillsBank(),
+      loadCompanies(),
+      loadProjectsBank(),
+    ]);
+  return { profile, experienceBank, skillsBank, companies, projectsBank };
 }

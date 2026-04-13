@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   BulletSchema,
+  ProjectSchema,
   SkillBankCategorySchema,
   SkillCategorySchema,
   ProfileSchema,
@@ -12,6 +13,7 @@ import {
 } from "../lib/schemas";
 
 export type Bullet = z.infer<typeof BulletSchema>;
+export type Project = z.infer<typeof ProjectSchema>;
 export type SkillBankCategory = z.infer<typeof SkillBankCategorySchema>;
 export type SkillCategory = z.infer<typeof SkillCategorySchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
