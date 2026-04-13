@@ -16,6 +16,8 @@ interface ResumePreviewProps {
   onBulletReset?: (id: string) => void;
   onSkillEdit?: (category: string, newItems: string) => void;
   sectionOrder?: string[];
+  onBulletRewrite?: (id: string) => void;
+  rewritingBulletId?: string | null;
 }
 
 export default function ResumePreview({
@@ -30,6 +32,8 @@ export default function ResumePreview({
   onBulletReset,
   onSkillEdit,
   sectionOrder,
+  onBulletRewrite,
+  rewritingBulletId,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -117,23 +121,35 @@ export default function ResumePreview({
                 const isLabelOverridden = !!(bulletLabelOverrides && bullet.id in bulletLabelOverrides);
                 const isOverridden = isTextOverridden || isLabelOverridden;
                 const isEditable = !!onBulletEdit;
+                const isRewriting = rewritingBulletId === bullet.id;
                 return (
                   <li
                     key={bullet.id}
-                    className="relative"
+                    className="relative group"
                     style={isOverridden ? { backgroundColor: "rgba(253, 224, 71, 0.15)" } : undefined}
                   >
+                    {onBulletRewrite && (
+                      <button
+                        onClick={() => !rewritingBulletId && onBulletRewrite(bullet.id)}
+                        disabled={!!rewritingBulletId}
+                        className="absolute -left-8 top-0 w-5 h-5 flex items-center justify-center text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors opacity-0 group-hover:opacity-100 disabled:cursor-wait"
+                        title="Rewrite with AI"
+                        style={{ fontSize: "11px" }}
+                      >
+                        {isRewriting ? "…" : "✦"}
+                      </button>
+                    )}
                     {isOverridden && onBulletReset && (
                       <button
                         onClick={() => onBulletReset(bullet.id)}
-                        className="absolute -left-8 top-0 w-5 h-5 pr-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        className="absolute top-0 w-5 h-5 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
                         title="Reset to original"
-                        style={{ fontSize: "12px" }}
+                        style={{ fontSize: "12px", left: onBulletRewrite ? "-52px" : "-32px" }}
                       >
                         ↺
                       </button>
                     )}
-                    <strong>
+                    <strong style={isRewriting ? { opacity: 0.4 } : undefined}>
                       {isEditable && onBulletLabelEdit ? (
                         <EditableText
                           key={bullet.id + "-label-" + (isLabelOverridden ? "edited" : "original")}
@@ -145,15 +161,17 @@ export default function ResumePreview({
                       )}
                       :
                     </strong>{" "}
-                    {isEditable ? (
-                      <EditableText
-                        key={bullet.id + "-text-" + (isTextOverridden ? "edited" : "original")}
-                        text={bullet.text}
-                        onCommit={(newText) => onBulletEdit(bullet.id, newText)}
-                      />
-                    ) : (
-                      bullet.text
-                    )}
+                    <span style={isRewriting ? { opacity: 0.4 } : undefined}>
+                      {isEditable ? (
+                        <EditableText
+                          key={bullet.id + "-text-" + (isTextOverridden ? "edited" : "original")}
+                          text={bullet.text}
+                          onCommit={(newText) => onBulletEdit(bullet.id, newText)}
+                        />
+                      ) : (
+                        bullet.text
+                      )}
+                    </span>
                   </li>
                 );
               })}
