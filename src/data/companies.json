@@ -1,23 +1,30 @@
 [
   {
     "name": "Joulea",
-    "role": "Senior Software Engineer, AI",
-    "dates": "May 2023 – Present",
+    "role": "Software Engineer, AI (Contract)",
+    "dates": "January 2025 – June 2025",
     "location": "Atlanta, GA",
     "order": 1
   },
   {
-    "name": "T-Mobile",
-    "role": "Software Engineer",
-    "dates": "May 2021 – January 2023",
+    "name": "Tower Cleaning Services",
+    "role": "Co-Founder & Software Developer",
+    "dates": "January 2023 – January 2024",
     "location": "Atlanta, GA",
     "order": 2
+  },
+  {
+    "name": "T-Mobile",
+    "role": "Software Engineer",
+    "dates": "May 2021 – December 2022",
+    "location": "Atlanta, GA",
+    "order": 3
   },
   {
     "name": "Cvent",
     "role": "Quality Engineer Intern",
     "dates": "June 2019 – August 2019",
     "location": "Atlanta, GA",
-    "order": 3
+    "order": 4
   }
 ]

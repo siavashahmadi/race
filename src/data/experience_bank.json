@@ -12,7 +12,7 @@
     "id": "j2-data",
     "company": "Joulea",
     "category": ["Backend", "Data", "ML"],
-    "label": "High-Throughput Data & APIs",
+    "label": "Fault-Tolerant IoT Ingestion Pipeline",
     "text": "Designed fault-tolerant IoT ingestion pipeline processing 10M+ data points daily through RabbitMQ, machine learning-based normalization, fault detection, and database persistence; integrated VOLTTRON for message replay during network outages ensuring zero data loss; resolved intermittent data gaps via root cause analysis and implemented retry logic with exponential backoff.",
     "priority": 1,
     "charCount": 370
@@ -21,28 +21,28 @@
     "id": "j3-llm",
     "company": "Joulea",
     "category": ["AI", "Full-Stack"],
-    "label": "LLM-Powered Support Chatbot",
-    "text": "Designed agent-based RAG system using LangChain and LlamaIndex with FAISS vector search for semantic retrieval across building documentation; implemented conversation memory and context windowing for multi-turn interactions, achieving 85% response accuracy validated through SME testing.",
+    "label": "LLM-Powered AI Chatbot",
+    "text": "Designed agent-based RAG system using LangChain and LlamaIndex with FAISS vector search for semantic retrieval across building documentation; implemented conversation memory and context window management for multi-turn interactions, achieving 85% response accuracy validated through SME testing.",
     "priority": 1,
-    "charCount": 287
+    "charCount": 292
   },
   {
     "id": "j4-ai-label",
     "company": "Joulea",
     "category": ["AI", "ML", "Data"],
-    "label": "Generative AI Data Labeling & ML Pipeline",
-    "text": "Deployed OpenAI API-based machine learning workflow to normalize and classify unstructured IoT sensor data (e.g., TMP vs TEMP vendor variations) using NLP techniques and embedding-based similarity matching; eliminated a manual process while increasing labeling speed by 67% and maintaining 90% accuracy.",
+    "label": "AI-Driven Data Labeling & Pattern Recognition",
+    "text": "Deployed OpenAI API-based machine learning workflow to normalize and classify unstructured IoT sensor data (e.g., TMP vs TEMP vendor variations) using NLP techniques and embedding-based similarity matching; eliminated a manual process while increasing labeling speed by 67% and maintaining 90% accuracy, enabling downstream pattern recognition algorithms.",
     "priority": 1,
-    "charCount": 301
+    "charCount": 349
   },
   {
     "id": "j5-ml",
     "company": "Joulea",
     "category": ["ML", "Data"],
-    "label": "ML Model Development & Evaluation",
-    "text": "Built and fine-tuned classification models using Scikit-learn and Python to detect HVAC fault patterns from time-series sensor data; designed feature engineering pipelines to extract meaningful signals from raw IoT streams, improving fault detection precision across 200+ commercial buildings.",
+    "label": "ML Model Development & Fault Detection",
+    "text": "Built and fine-tuned classification models using PyTorch and scikit-learn to detect HVAC fault patterns from time-series sensor data; engineered feature extraction pipelines to recognize anomalous signals from raw IoT streams, improving fault detection precision across 200+ commercial buildings.",
     "priority": 1,
-    "charCount": 289
+    "charCount": 293
   },
   {
     "id": "j6-predict",
@@ -148,9 +148,9 @@
     "company": "T-Mobile",
     "category": ["Frontend", "UI"],
     "label": "Enterprise Application Development",
-    "text": "Built and maintained a component-based Angular application for prepaid.t-mobile.com serving 20M+ prepaid customers; implemented lazy loading, tree shaking, and code splitting to cut initial load time by 40%; built PCI-compliant payment portal with secure transaction workflows.",
+    "text": "Built and maintained a component-based Angular application for prepaid.t-mobile.com serving 20M+ prepaid customers; implemented responsive design, lazy loading, tree shaking, and code splitting to cut initial load time by 40%; built PCI-compliant payment portal with secure transaction workflows.",
     "priority": 1,
-    "charCount": 275
+    "charCount": 293
   },
   {
     "id": "tm2-micro",
@@ -174,7 +174,7 @@
     "id": "tm5-infra",
     "company": "T-Mobile",
     "category": ["DevOps", "Systems"],
-    "label": "Cloud-Native Infrastructure & Messaging",
+    "label": "Containerized Deployment & Async Messaging",
     "text": "Deployed services via Docker and OpenShift with health checks, graceful shutdown, and rolling deployments for zero-downtime releases; integrated RabbitMQ for async payment processing with idempotent message handlers and dead letter queue retry logic; configured Apigee for rate limiting and traffic management across services.",
     "priority": 1,
     "charCount": 327
@@ -211,8 +211,80 @@
     "company": "Cvent",
     "category": ["Backend", "Data"],
     "label": "Business Impact Development",
-    "text": "Contributed to Lead Scoring algorithm using Java/SQL, reducing hoteliers' response time on event inquiries by over 90%.",
+    "text": "Contributed to Lead Scoring algorithm using Java/SQL, reducing hoteliers' response time on event inquiries by over 90% through targeted optimization of ranking and matching logic.",
     "priority": 1,
-    "charCount": 119
+    "charCount": 178
+  },
+  {
+    "id": "j17-iot",
+    "company": "Joulea",
+    "category": ["Backend", "Data", "Systems"],
+    "label": "End-to-End IoT Data Pipeline",
+    "text": "Designed end-to-end data pipeline processing 10M+ data points daily through message queuing, ML-based normalization, and fault detection algorithms; integrated replay logic during network outages ensuring zero data loss; resolved intermittent data gaps via root cause analysis and retry logic with exponential backoff.",
+    "priority": 1,
+    "charCount": 312
+  },
+  {
+    "id": "j18-label-generic",
+    "company": "Joulea",
+    "category": ["AI", "ML", "Data"],
+    "label": "ML-Driven Data Labeling & Pattern Recognition",
+    "text": "Deployed ML workflow using Python and NLP techniques to normalize and classify unstructured IoT sensor data via embedding-based similarity matching; automated a manual labeling process, increasing throughput by 67% while maintaining 90% accuracy, enabling downstream pattern recognition algorithms.",
+    "priority": 1,
+    "charCount": 291
+  },
+  {
+    "id": "j19-hmi",
+    "company": "Joulea",
+    "category": ["Frontend", "Systems"],
+    "label": "Human-Machine Interface Development",
+    "text": "Architected React/TypeScript dashboards with Three.js 3D building visualization for real-time HVAC monitoring; designed intuitive interfaces enabling building managers to interpret ML-generated fault detection alerts and analytics.",
+    "priority": 2,
+    "charCount": 228
+  },
+  {
+    "id": "j20-arch",
+    "company": "Joulea",
+    "category": ["Systems", "DevOps", "Full-Stack"],
+    "label": "Distributed Systems Architecture",
+    "text": "Architected full-stack B2B SaaS platform across React, Flask, and AWS infrastructure (EC2, S3, Lambda, RDS Aurora, Redis) with automated CI/CD pipelines; migrated historical data to S3 via AWS Glue ETL, reducing infrastructure costs by 57% while maintaining sub-second query performance through Athena-backed APIs.",
+    "priority": 1,
+    "charCount": 314
+  },
+  {
+    "id": "tcs1",
+    "company": "Tower Cleaning Services",
+    "category": ["Leadership", "Business", "Operations"],
+    "label": "Business Operations & Scaling",
+    "text": "Co-founded commercial and residential cleaning company; drove operations from launch to $200K+ in annual revenue through strategic client acquisition, process optimization, and team coordination across multiple service crews.",
+    "priority": 1,
+    "charCount": 222
+  },
+  {
+    "id": "tcs2",
+    "company": "Tower Cleaning Services",
+    "category": ["Full-Stack", "Frontend", "Backend"],
+    "label": "Full-Stack Application Development",
+    "text": "Designed and built customer booking portal and internal cleaner management platform using Vue.js and Node.js; enabled real-time job scheduling, assignment tracking, and calendar integration, reducing scheduling friction and manual coordination.",
+    "priority": 1,
+    "charCount": 240
+  },
+  {
+    "id": "tcs3",
+    "company": "Tower Cleaning Services",
+    "category": ["Leadership", "Process", "Product"],
+    "label": "Product Iteration from User Feedback",
+    "text": "Translated direct customer and cleaner feedback into iterative feature releases, optimizing booking workflows and cleaner scheduling interfaces based on real-world operational needs.",
+    "priority": 2,
+    "charCount": 181
+  },
+  {
+    "id": "tm6-infra-generic",
+    "company": "T-Mobile",
+    "category": ["DevOps", "Systems"],
+    "label": "Containerized Deployment & Async Messaging",
+    "text": "Deployed containerized services via Docker and OpenShift with health checks and rolling deployments; integrated asynchronous message processing with idempotent handlers and dead-letter queue retry logic; configured API gateway rate limiting and traffic management.",
+    "priority": 1,
+    "charCount": 262
   }
 ]

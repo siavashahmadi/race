@@ -8,5 +8,55 @@
     "category": ["full-stack", "ai", "tooling", "developer-tools"],
     "priority": 1,
     "charCount": 211
+  },
+  {
+    "id": "p2",
+    "name": "Social Scheduler",
+    "description": "Five specialized LangGraph agents coordinate group social plans through 1:1 iMessage conversations without a group chat. Agents handle message parsing, venue search via live APIs, preference learning, and orchestration with persistent state across sessions.",
+    "technologies": ["LangGraph", "FastAPI", "Claude API", "Python", "iMessage"],
+    "url": "",
+    "category": ["ai", "backend", "multi-agent"],
+    "priority": 1,
+    "charCount": 254
+  },
+  {
+    "id": "p3",
+    "name": "Personal Assistant",
+    "description": "AI-powered personal chief of staff managing job search, calendar, email, and daily planning through MCP integrations (Gmail, Google Calendar, browser automation, iMessage). 15+ custom slash commands, persistent memory across conversations, and automated multi-step workflows.",
+    "technologies": ["Claude API", "MCP", "Python", "Gmail", "Google Calendar"],
+    "url": "",
+    "category": ["ai", "tooling", "automation"],
+    "priority": 1,
+    "charCount": 271
+  },
+  {
+    "id": "p4",
+    "name": "Job Application Agents",
+    "description": "Suite of collaborative AI agents for job searching at scale: automated resume tailoring, cover letter generation, job-description matching, and application tracking. Human-in-the-loop architecture where AI handles research and drafting while the user makes final decisions.",
+    "technologies": ["Claude API", "LangGraph", "Python", "FastAPI"],
+    "url": "",
+    "category": ["ai", "automation", "multi-agent"],
+    "priority": 1,
+    "charCount": 268
+  },
+  {
+    "id": "p5",
+    "name": "Blackjack",
+    "description": "Online blackjack for playing with friends across the globe in real-time. WebSocket-based game state synchronization across clients, multiplayer lobby system, and conflict resolution for concurrent actions.",
+    "technologies": ["WebSockets", "Node.js", "React", "TypeScript"],
+    "url": "",
+    "category": ["full-stack", "real-time"],
+    "priority": 2,
+    "charCount": 205
+  },
+  {
+    "id": "p6",
+    "name": "Decipher",
+    "description": "Speedcubing timer with solve tracking, session statistics, and historical performance analytics. Full-stack React app with real-time state management and persistent data storage.",
+    "technologies": ["React", "TypeScript", "Node.js"],
+    "url": "",
+    "category": ["full-stack", "tooling"],
+    "priority": 2,
+    "charCount": 178
   }
 ]
