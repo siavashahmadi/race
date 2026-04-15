@@ -15,18 +15,20 @@ const launchOptions = {
 };
 
 async function getBrowser(): Promise<Browser> {
-  if (process.env.NODE_ENV === "production") {
-    if (!(globalThis as Record<string, unknown>).__prodBrowser) {
-      (globalThis as Record<string, unknown>).__prodBrowser =
-        await puppeteer.launch(launchOptions);
-    }
-    return (globalThis as Record<string, unknown>).__prodBrowser as Browser;
+  const key = process.env.NODE_ENV === "production" ? "__prodBrowser" : "__browser";
+  const g = globalThis as Record<string, unknown>;
+  const existing = g[key] as Browser | undefined;
+
+  if (existing?.isConnected()) return existing;
+
+  // Dead or missing — close cleanly if it exists, then relaunch
+  if (existing) {
+    try { await existing.close(); } catch { /* already dead */ }
   }
-  // Dev mode: store on globalThis to survive hot reloads
-  if (!(globalThis as Record<string, unknown>).__browser) {
-    (globalThis as Record<string, unknown>).__browser = await puppeteer.launch(launchOptions);
-  }
-  return (globalThis as Record<string, unknown>).__browser as Browser;
+
+  const browser = await puppeteer.launch(launchOptions);
+  g[key] = browser;
+  return browser;
 }
 
 export async function generatePDF(state: ResumeState): Promise<Buffer> {
