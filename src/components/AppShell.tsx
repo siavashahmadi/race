@@ -62,9 +62,15 @@ export default function AppShell({
   const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
   const [companyMetaOverrides, setCompanyMetaOverrides] = useState<Record<string, CompanyMetaOverride>>({});
   const [projectOverrides, setProjectOverrides] = useState<Record<string, ProjectOverride>>({});
+  const [pageMargin, setPageMargin] = useState(0.5);
+  const [sectionSpacing, setSectionSpacing] = useState(1.0);
+  const [bodyFontSize, setBodyFontSize] = useState(10);
+  const [lineHeight, setLineHeight] = useState(1.2);
+  const [hideLinkedIn, setHideLinkedIn] = useState(false);
 
-  const selectedBullets = allBullets
-    .filter((b) => selectedIds.includes(b.id))
+  const selectedBullets = selectedIds
+    .map((id) => allBullets.find((b) => b.id === id))
+    .filter((b): b is Bullet => !!b)
     .map((b) => {
       let result = b;
       if (b.id in bulletTextOverrides) result = { ...result, text: bulletTextOverrides[b.id] };
@@ -98,6 +104,14 @@ export default function AppShell({
     setCuratedSkills((prev) =>
       prev.map((c) => (c.category === category ? { ...c, items } : c))
     );
+  }, []);
+
+  const handleSkillReorder = useCallback((from: number, to: number) => {
+    setCuratedSkills((prev) => {
+      const next = [...prev];
+      [next[from], next[to]] = [next[to], next[from]];
+      return next;
+    });
   }, []);
 
   const handleCompanyMetaEdit = useCallback((company: string, field: keyof CompanyMetaOverride, value: string) => {
@@ -176,6 +190,28 @@ export default function AppShell({
     });
   }, []);
 
+  const handleBulletReorder = useCallback((id: string, direction: "up" | "down") => {
+    setSelectedIds((prev) => {
+      const bullet = allBullets.find((b) => b.id === id);
+      if (!bullet) return prev;
+      const companyIds = prev.filter(
+        (sid) => allBullets.find((b) => b.id === sid)?.company === bullet.company
+      );
+      const pos = companyIds.indexOf(id);
+      if (direction === "up" && pos === 0) return prev;
+      if (direction === "down" && pos === companyIds.length - 1) return prev;
+      const swapPos = direction === "up" ? pos - 1 : pos + 1;
+      const newCompanyIds = [...companyIds];
+      [newCompanyIds[pos], newCompanyIds[swapPos]] = [newCompanyIds[swapPos], newCompanyIds[pos]];
+      let ci = 0;
+      return prev.map((sid) => {
+        const b = allBullets.find((b) => b.id === sid);
+        if (b?.company === bullet.company) return newCompanyIds[ci++];
+        return sid;
+      });
+    });
+  }, [allBullets]);
+
   const handleAnalyze = async (jd: string, mode: "curate" | "optimize" = "curate") => {
     setIsAnalyzing(true);
     setError("");
@@ -199,6 +235,11 @@ export default function AppShell({
       setBulletLabelOverrides(data.bulletLabelOverrides || {});
       setCompanyMetaOverrides({});
       setProjectOverrides({});
+      setPageMargin(0.5);
+      setSectionSpacing(1.0);
+      setBodyFontSize(10);
+      setLineHeight(1.2);
+      setHideLinkedIn(false);
       setKeywords(data.keywords || []);
       setHasAnalyzed(true);
     } catch (err) {
@@ -216,6 +257,11 @@ export default function AppShell({
     setKeywords([]);
     setCompanyMetaOverrides({});
     setProjectOverrides({});
+    setPageMargin(0.5);
+    setSectionSpacing(1.0);
+    setBodyFontSize(10);
+    setLineHeight(1.2);
+    setHideLinkedIn(false);
     setHasAnalyzed(true);
   };
 
@@ -227,6 +273,11 @@ export default function AppShell({
     setKeywords([]);
     setCompanyMetaOverrides({});
     setProjectOverrides({});
+    setPageMargin(0.5);
+    setSectionSpacing(1.0);
+    setBodyFontSize(10);
+    setLineHeight(1.2);
+    setHideLinkedIn(false);
     setHasAnalyzed(true);
   };
 
@@ -252,6 +303,11 @@ export default function AppShell({
           companyMetaOverrides,
           projectOverrides,
           sectionOrder,
+          pageMargin,
+          sectionSpacing,
+          bodyFontSize,
+          lineHeight,
+          hideLinkedIn,
         }),
       });
       if (!res.ok) {
@@ -292,6 +348,11 @@ export default function AppShell({
       projectOverrides,
       keywords,
       sectionOrder,
+      pageMargin,
+      sectionSpacing,
+      bodyFontSize,
+      lineHeight,
+      hideLinkedIn,
     });
     setSaveLabel("");
     setIsSaving(false);
@@ -307,6 +368,11 @@ export default function AppShell({
     setBulletLabelOverrides(entry.bulletLabelOverrides);
     setCompanyMetaOverrides(entry.companyMetaOverrides);
     setProjectOverrides(entry.projectOverrides);
+    setPageMargin(entry.pageMargin);
+    setSectionSpacing(entry.sectionSpacing);
+    setBodyFontSize(entry.bodyFontSize);
+    setLineHeight(entry.lineHeight);
+    setHideLinkedIn(entry.hideLinkedIn);
     setKeywords(entry.keywords);
     setSectionOrder(entry.sectionOrder);
     setJobDescription("");
@@ -563,6 +629,11 @@ export default function AppShell({
                     setBulletLabelOverrides({});
                     setCompanyMetaOverrides({});
                     setProjectOverrides({});
+                    setPageMargin(0.5);
+                    setSectionSpacing(1.0);
+                    setBodyFontSize(10);
+                    setLineHeight(1.2);
+                    setHideLinkedIn(false);
                     setKeywords([]);
                     setJobDescription("");
                     setSectionOrder(["Skills", "Experience", "Projects", "Education"]);
@@ -593,6 +664,46 @@ export default function AppShell({
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-4 space-y-3">
+                <h2 className="text-sm font-semibold text-gray-700">Layout</h2>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Margins</span>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => setPageMargin((m) => Math.max(0.25, parseFloat((m - 0.05).toFixed(2))))} disabled={pageMargin <= 0.25} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">−</button>
+                    <span className="text-xs text-gray-500 w-14 text-center">{pageMargin.toFixed(2)}in</span>
+                    <button onClick={() => setPageMargin((m) => Math.min(1.0, parseFloat((m + 0.05).toFixed(2))))} disabled={pageMargin >= 1.0} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">+</button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Spacing</span>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => setSectionSpacing((s) => Math.max(0.25, parseFloat((s - 0.05).toFixed(2))))} disabled={sectionSpacing <= 0.25} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">−</button>
+                    <span className="text-xs text-gray-500 w-14 text-center">{sectionSpacing.toFixed(2)}×</span>
+                    <button onClick={() => setSectionSpacing((s) => Math.min(2.0, parseFloat((s + 0.05).toFixed(2))))} disabled={sectionSpacing >= 2.0} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-4 space-y-3">
+                <h2 className="text-sm font-semibold text-gray-700">Typography</h2>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Font size</span>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => setBodyFontSize((s) => Math.max(8, parseFloat((s - 0.5).toFixed(1))))} disabled={bodyFontSize <= 8} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">−</button>
+                    <span className="text-xs text-gray-500 w-14 text-center">{bodyFontSize.toFixed(1)}pt</span>
+                    <button onClick={() => setBodyFontSize((s) => Math.min(11, parseFloat((s + 0.5).toFixed(1))))} disabled={bodyFontSize >= 11} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">+</button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Line height</span>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => setLineHeight((h) => Math.max(0.9, parseFloat((h - 0.05).toFixed(2))))} disabled={lineHeight <= 0.9} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">−</button>
+                    <span className="text-xs text-gray-500 w-14 text-center">{lineHeight.toFixed(2)}</span>
+                    <button onClick={() => setLineHeight((h) => Math.min(1.4, parseFloat((h + 0.05).toFixed(2))))} disabled={lineHeight >= 1.4} className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-mono disabled:opacity-40">+</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -639,12 +750,20 @@ export default function AppShell({
                     sectionOrder={sectionOrder}
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
+                    onSkillReorder={handleSkillReorder}
+                    onBulletReorder={handleBulletReorder}
                     selectedProjects={selectedProjects}
                     projectOverrides={projectOverrides}
                     onProjectEdit={handleProjectEdit}
                     onProjectReset={handleProjectReset}
                     companyMetaOverrides={companyMetaOverrides}
                     onCompanyMetaEdit={handleCompanyMetaEdit}
+                    pageMargin={pageMargin}
+                    sectionSpacing={sectionSpacing}
+                    bodyFontSize={bodyFontSize}
+                    lineHeight={lineHeight}
+                    hideLinkedIn={hideLinkedIn}
+                    onToggleLinkedIn={() => setHideLinkedIn((h) => !h)}
                   />
                 </div>
               </div>
@@ -745,12 +864,20 @@ export default function AppShell({
                     sectionOrder={sectionOrder}
                     onBulletRewrite={jobDescription ? handleBulletRewrite : undefined}
                     rewritingBulletId={rewritingBulletId}
+                    onSkillReorder={handleSkillReorder}
+                    onBulletReorder={handleBulletReorder}
                     selectedProjects={selectedProjects}
                     projectOverrides={projectOverrides}
                     onProjectEdit={handleProjectEdit}
                     onProjectReset={handleProjectReset}
                     companyMetaOverrides={companyMetaOverrides}
                     onCompanyMetaEdit={handleCompanyMetaEdit}
+                    pageMargin={pageMargin}
+                    sectionSpacing={sectionSpacing}
+                    bodyFontSize={bodyFontSize}
+                    lineHeight={lineHeight}
+                    hideLinkedIn={hideLinkedIn}
+                    onToggleLinkedIn={() => setHideLinkedIn((h) => !h)}
                   />
                 </div>
               </div>
@@ -783,6 +910,11 @@ export default function AppShell({
                   setBulletLabelOverrides({});
                   setCompanyMetaOverrides({});
                   setProjectOverrides({});
+                  setPageMargin(0.5);
+                  setSectionSpacing(1.0);
+                  setBodyFontSize(10);
+                  setLineHeight(1.2);
+                  setHideLinkedIn(false);
                   setKeywords([]);
                   setJobDescription("");
                   setSectionOrder(["Skills", "Experience", "Projects", "Education"]);
