@@ -23,6 +23,11 @@ export async function POST(request: Request) {
       companyMetaOverrides: parsed.data.companyMetaOverrides,
       projectOverrides: parsed.data.projectOverrides,
       sectionOrder: parsed.data.sectionOrder,
+      pageMargin: parsed.data.pageMargin,
+      sectionSpacing: parsed.data.sectionSpacing,
+      bodyFontSize: parsed.data.bodyFontSize,
+      lineHeight: parsed.data.lineHeight,
+      hideLinkedIn: parsed.data.hideLinkedIn,
     });
 
     return new Response(new Uint8Array(pdfBuffer), {

@@ -57,6 +57,11 @@ function PrintContent() {
         selectedProjects={selectedProjects}
         projectOverrides={state.projectOverrides}
         companyMetaOverrides={state.companyMetaOverrides}
+        pageMargin={state.pageMargin}
+        sectionSpacing={state.sectionSpacing}
+        bodyFontSize={state.bodyFontSize}
+        lineHeight={state.lineHeight}
+        hideLinkedIn={state.hideLinkedIn}
       />
     </div>
   );

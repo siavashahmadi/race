@@ -94,6 +94,11 @@ export const ExportRequestSchema = z.object({
   companyMetaOverrides: z.record(z.string(), CompanyMetaOverrideSchema).default({}),
   projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   sectionOrder: sectionOrderField,
+  pageMargin: z.number().min(0.25).max(1.0).default(0.5),
+  sectionSpacing: z.number().min(0.25).max(2.0).default(1.0),
+  bodyFontSize: z.number().min(8).max(11).default(10),
+  lineHeight: z.number().min(0.9).max(1.4).default(1.2),
+  hideLinkedIn: z.boolean().default(false),
 });
 
 export const ResumeStateSchema = z.object({
@@ -105,6 +110,11 @@ export const ResumeStateSchema = z.object({
   companyMetaOverrides: z.record(z.string(), CompanyMetaOverrideSchema).default({}),
   projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   sectionOrder: sectionOrderField,
+  pageMargin: z.number().min(0.25).max(1.0).default(0.5),
+  sectionSpacing: z.number().min(0.25).max(2.0).default(1.0),
+  bodyFontSize: z.number().min(8).max(11).default(10),
+  lineHeight: z.number().min(0.9).max(1.4).default(1.2),
+  hideLinkedIn: z.boolean().default(false),
 });
 
 export const SavedResumeSchema = z.object({
@@ -121,6 +131,11 @@ export const SavedResumeSchema = z.object({
   projectOverrides: z.record(z.string(), ProjectOverrideSchema).default({}),
   keywords: z.array(z.string()).default([]),
   sectionOrder: sectionOrderField,
+  pageMargin: z.number().min(0.25).max(1.0).default(0.5),
+  sectionSpacing: z.number().min(0.25).max(2.0).default(1.0),
+  bodyFontSize: z.number().min(8).max(11).default(10),
+  lineHeight: z.number().min(0.9).max(1.4).default(1.2),
+  hideLinkedIn: z.boolean().default(false),
 });
 
 export const SavedResumeStoreSchema = z.object({
