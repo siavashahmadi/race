@@ -18,12 +18,20 @@ interface ResumePreviewProps {
   sectionOrder?: string[];
   onBulletRewrite?: (id: string) => void;
   rewritingBulletId?: string | null;
+  onSkillReorder?: (from: number, to: number) => void;
+  onBulletReorder?: (id: string, direction: "up" | "down") => void;
   selectedProjects?: Project[];
   projectOverrides?: Record<string, ProjectOverride>;
   onProjectEdit?: (id: string, field: keyof ProjectOverride, value: string) => void;
   onProjectReset?: (id: string) => void;
   companyMetaOverrides?: Record<string, CompanyMetaOverride>;
   onCompanyMetaEdit?: (company: string, field: keyof CompanyMetaOverride, value: string) => void;
+  pageMargin?: number;
+  sectionSpacing?: number;
+  bodyFontSize?: number;
+  lineHeight?: number;
+  hideLinkedIn?: boolean;
+  onToggleLinkedIn?: () => void;
 }
 
 export default function ResumePreview({
@@ -40,12 +48,20 @@ export default function ResumePreview({
   sectionOrder,
   onBulletRewrite,
   rewritingBulletId,
+  onSkillReorder,
+  onBulletReorder,
   selectedProjects,
   projectOverrides,
   onProjectEdit,
   onProjectReset,
   companyMetaOverrides,
   onCompanyMetaEdit,
+  pageMargin,
+  sectionSpacing,
+  bodyFontSize,
+  lineHeight,
+  hideLinkedIn,
+  onToggleLinkedIn,
 }: ResumePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -68,8 +84,10 @@ export default function ResumePreview({
 
   const order = sectionOrder ?? ["Skills", "Experience", "Education"];
 
+  const sp = sectionSpacing ?? 1;
+
   const skillsSection = curatedSkills.length > 0 ? (
-    <section key="Skills" className="mb-6">
+    <section key="Skills" style={{ marginBottom: `${sp * 1.5}rem` }}>
       <h2 className="text-lg font-bold uppercase tracking-wide">Skills</h2>
       <div
         style={{
@@ -78,26 +96,47 @@ export default function ResumePreview({
           marginBottom: "8px",
         }}
       />
-      <div className="space-y-1" style={{ fontSize: "10pt" }}>
-        {curatedSkills.map((cat) => (
-          <p key={cat.category}>
-            <strong>{cat.category}:</strong>{" "}
-            {onSkillEdit ? (
-              <EditableText
-                text={cat.items.join(", ")}
-                onCommit={(newText) => onSkillEdit(cat.category, newText)}
-              />
-            ) : (
-              cat.items.join(", ")
+      <div className="space-y-1" style={{ fontSize: `${bodyFontSize ?? 10}pt` }}>
+        {curatedSkills.map((cat, i) => (
+          <div key={cat.category} className="relative group">
+            {onSkillReorder && (
+              <div
+                className="absolute flex flex-col opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ left: "-20px", top: 0 }}
+              >
+                <button
+                  onClick={() => onSkillReorder(i, i - 1)}
+                  disabled={i === 0}
+                  className="w-4 h-3.5 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-0"
+                  style={{ fontSize: "9px" }}
+                >↑</button>
+                <button
+                  onClick={() => onSkillReorder(i, i + 1)}
+                  disabled={i === curatedSkills.length - 1}
+                  className="w-4 h-3.5 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-0"
+                  style={{ fontSize: "9px" }}
+                >↓</button>
+              </div>
             )}
-          </p>
+            <p>
+              <strong>{cat.category}:</strong>{" "}
+              {onSkillEdit ? (
+                <EditableText
+                  text={cat.items.join(", ")}
+                  onCommit={(newText) => onSkillEdit(cat.category, newText)}
+                />
+              ) : (
+                cat.items.join(", ")
+              )}
+            </p>
+          </div>
         ))}
       </div>
     </section>
   ) : null;
 
   const experienceSection = (
-    <section key="Experience" className="mb-6">
+    <section key="Experience" style={{ marginBottom: `${sp * 1.5}rem` }}>
       <h2 className="text-lg font-bold uppercase tracking-wide">
         Professional Experience
       </h2>
@@ -114,7 +153,7 @@ export default function ResumePreview({
         const meta = COMPANY_META[company];
         const compOv = companyMetaOverrides?.[company];
         return (
-          <div key={company} className="mb-4">
+          <div key={company} style={{ marginBottom: `${sp}rem` }}>
             <div className="flex justify-between items-baseline">
               <h3 className="font-bold text-md">
                 {onCompanyMetaEdit ? (
@@ -141,19 +180,44 @@ export default function ResumePreview({
                 ) : (compOv?.dates ?? meta.dates)}
               </span>
             </div>
-            <p className="text-xs text-gray-600 mb-1 italic">
-              {onCompanyMetaEdit ? (
-                <EditableText
-                  text={compOv?.location ?? meta.location}
-                  onCommit={(v) => onCompanyMetaEdit(company, "location", v)}
-                />
-              ) : (compOv?.location ?? meta.location)}
-            </p>
+            {(() => {
+              const locValue = compOv?.location;
+              const isDeleted = locValue === "";
+              const displayLoc = locValue !== undefined ? locValue : meta.location;
+              if (isDeleted) {
+                return onCompanyMetaEdit ? (
+                  <p className="mb-1">
+                    <button
+                      onClick={() => onCompanyMetaEdit(company, "location", meta.location)}
+                      className="text-[10px] text-gray-300 hover:text-gray-500 italic transition-colors"
+                    >+ location</button>
+                  </p>
+                ) : null;
+              }
+              return (
+                <p className="text-xs text-gray-600 mb-1 italic">
+                  {onCompanyMetaEdit ? (
+                    <>
+                      <EditableText
+                        text={displayLoc}
+                        onCommit={(v) => onCompanyMetaEdit(company, "location", v)}
+                      />
+                      <button
+                        onClick={() => onCompanyMetaEdit(company, "location", "")}
+                        className="ml-1 text-gray-300 hover:text-red-400 transition-colors align-middle"
+                        title="Remove location"
+                        style={{ fontSize: "10px", lineHeight: 1 }}
+                      >×</button>
+                    </>
+                  ) : displayLoc}
+                </p>
+              );
+            })()}
             <ul
-              className="ml-4 list-disc space-y-1"
-              style={{ fontSize: "10pt" }}
+              className="ml-6 list-disc space-y-1"
+              style={{ fontSize: `${bodyFontSize ?? 10}pt` }}
             >
-              {bullets.map((bullet) => {
+              {bullets.map((bullet, idx) => {
                 const isTextOverridden = !!(bulletTextOverrides && bullet.id in bulletTextOverrides);
                 const isLabelOverridden = !!(bulletLabelOverrides && bullet.id in bulletLabelOverrides);
                 const isOverridden = isTextOverridden || isLabelOverridden;
@@ -185,6 +249,25 @@ export default function ResumePreview({
                       >
                         ↺
                       </button>
+                    )}
+                    {onBulletReorder && (
+                      <div
+                        className="absolute top-0 flex flex-col opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ right: "-28px" }}
+                      >
+                        <button
+                          onClick={() => onBulletReorder(bullet.id, "up")}
+                          disabled={idx === 0}
+                          className="w-4 h-3.5 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-0"
+                          style={{ fontSize: "9px" }}
+                        >↑</button>
+                        <button
+                          onClick={() => onBulletReorder(bullet.id, "down")}
+                          disabled={idx === bullets.length - 1}
+                          className="w-4 h-3.5 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-0"
+                          style={{ fontSize: "9px" }}
+                        >↓</button>
+                      </div>
                     )}
                     <strong style={isRewriting ? { opacity: 0.4 } : undefined}>
                       {isEditable && onBulletLabelEdit ? (
@@ -221,7 +304,7 @@ export default function ResumePreview({
 
   const projectsSection =
     selectedProjects && selectedProjects.length > 0 ? (
-      <section key="Projects" className="mb-6">
+      <section key="Projects" style={{ marginBottom: `${sp * 1.5}rem` }}>
         <h2 className="text-lg font-bold uppercase tracking-wide">Projects</h2>
         <div
           style={{
@@ -230,10 +313,10 @@ export default function ResumePreview({
             marginBottom: "8px",
           }}
         />
-        <div className="space-y-2" style={{ fontSize: "10pt" }}>
+        <div className="space-y-2" style={{ fontSize: `${bodyFontSize ?? 10}pt` }}>
           {selectedProjects.map((project) => {
             const projOv = projectOverrides?.[project.id];
-            const isOverridden = !!projOv;
+            const isOverridden = !!projOv && !!onProjectEdit;
             return (
               <div
                 key={project.id}
@@ -280,7 +363,7 @@ export default function ResumePreview({
                     />
                   ) : (projOv?.technologies ?? project.technologies.join(", "))}
                 </p>
-                <ul className="ml-4 list-disc">
+                <ul className="ml-6 list-disc">
                   <li>
                     {onProjectEdit ? (
                       <EditableText
@@ -310,7 +393,7 @@ export default function ResumePreview({
         }}
       />
       <div className="flex justify-between items-baseline">
-        <p style={{ fontSize: "10pt" }}>
+        <p style={{ fontSize: `${bodyFontSize ?? 10}pt` }}>
           <strong>{profile.education.school}</strong>,{" "}
           {profile.education.degree}
         </p>
@@ -329,14 +412,14 @@ export default function ResumePreview({
         width: "8.5in",
         height: "11in",
         overflow: "hidden",
-        padding: "0.5in",
+        padding: `${pageMargin ?? 0.5}in`,
         boxSizing: "border-box",
         fontFamily: "'Inter', sans-serif",
-        lineHeight: 1.2,
+        lineHeight: lineHeight ?? 1.2,
       }}
     >
       {/* Header — always fixed at top */}
-      <div className="flex justify-between items-end mb-4">
+      <div className={`flex justify-between ${hideLinkedIn ? "items-center" : "items-end"} mb-4`}>
         <h1
           className="text-4xl tracking-tight"
           style={{ fontFamily: "'Libre Baskerville', serif" }}
@@ -347,7 +430,24 @@ export default function ResumePreview({
           <p>
             {profile.phone} | {profile.email}
           </p>
-          <a href={profile.linkedin} className="text-blue-600 underline">{profile.linkedin}</a>
+          {!hideLinkedIn ? (
+            <p>
+              <a href={profile.linkedin} className="text-blue-600 underline">{profile.linkedin}</a>
+              {onToggleLinkedIn && (
+                <button
+                  onClick={onToggleLinkedIn}
+                  className="ml-1 text-gray-300 hover:text-red-400 transition-colors align-middle"
+                  title="Remove LinkedIn"
+                  style={{ fontSize: "10px", lineHeight: 1 }}
+                >×</button>
+              )}
+            </p>
+          ) : onToggleLinkedIn ? (
+            <button
+              onClick={onToggleLinkedIn}
+              className="text-[10px] text-gray-300 hover:text-gray-500 italic transition-colors"
+            >+ linkedin</button>
+          ) : null}
         </div>
       </div>
 
